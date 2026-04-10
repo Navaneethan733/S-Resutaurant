@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu | STACKLY — Fine Dining Salem</title>
+    <meta name="description" content="Explore STACKLY's full menu — starters, mains, desserts, drinks and chef's specials. Fine dining in Salem, Tamilnadu.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+
+        /* ══ Page Hero ══ */
+        .page-hero {
+            min-height: 65vh;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding-top: 140px; padding-bottom: 80px;
+            position: relative; overflow: hidden;
+        }
+        .page-hero-bg { position: absolute; inset: 0; z-index: 0; }
+        .page-hero-bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.18; }
+        .page-hero-bg::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(to top, var(--bg-deep) 35%, transparent);
+        }
+        .page-hero .container { position: relative; z-index: 2; }
+
+        .breadcrumb {
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 28px; font-size: 0.78rem;
+            letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted);
+        }
+        .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color .3s; }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: var(--primary); }
+
+        .page-hero-title {
+            font-family: var(--font-heading);
+            font-size: clamp(3.5rem, 9vw, 7.5rem);
+            line-height: 1.0; margin-bottom: 20px;
+        }
+        .page-hero-sub {
+            font-size: 1.05rem; font-weight: 300;
+            color: var(--text-muted); max-width: 520px; letter-spacing: .5px;
+        }
+
+        /* ══ Filter Bar ══ */
+        .filter-bar {
+            position: sticky; top: 0; z-index: 200;
+            background: rgba(11,28,24,0.97);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(197,160,89,.1);
+        }
+        .filter-inner {
+            display: flex; align-items: center;
+            overflow-x: auto; scrollbar-width: none;
+        }
+        .filter-inner::-webkit-scrollbar { display: none; }
+        .filter-btn {
+            flex-shrink: 0; padding: 22px 30px;
+            background: none; border: none; color: var(--text-muted);
+            font-family: var(--font-body); font-size: 0.78rem;
+            letter-spacing: 2px; text-transform: uppercase;
+            cursor: pointer; border-bottom: 2px solid transparent;
+            transition: color .3s, border-bottom .3s;
+        }
+        .filter-btn i { margin-right: 8px; font-size: 0.82rem; }
+        .filter-btn.active, .filter-btn:hover { color: var(--primary); border-bottom-color: var(--primary); }
+
+        /* ══ Menu Body ══ */
+        .menu-page-body { padding: 80px 0 120px; }
+
+        .menu-category { margin-bottom: 100px; }
+        .menu-category:last-child { margin-bottom: 0; }
+
+        .cat-header {
+            display: flex; align-items: flex-end; justify-content: space-between;
+            border-bottom: 1px solid rgba(197,160,89,.15);
+            padding-bottom: 30px; margin-bottom: 50px;
+        }
+        .cat-label {
+            text-transform: uppercase; letter-spacing: 4px;
+            font-size: 0.72rem; color: var(--primary); margin-bottom: 10px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .cat-label::before { content: ''; display: block; width: 28px; height: 1px; background: var(--primary); }
+        .cat-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2.8rem, 5vw, 4.5rem); line-height: 1;
+        }
+        .cat-count {
+            font-family: var(--font-heading); font-size: 5rem; font-weight: 700;
+            color: rgba(197,160,89,.08); line-height: 1;
+        }
+
+        /* ══ Card Grid ══ */
+        .featured-row {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 30px; margin-bottom: 50px;
+        }
+        .menu-card {
+            border: 1px solid rgba(197,160,89,.15);
+            border-radius: 500px 500px 16px 16px;
+            overflow: hidden; transition: all .5s var(--transition);
+            background: var(--bg-offset);
+        }
+        .menu-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0,0,0,.4);
+        }
+        .card-img-zone { width: 100%; aspect-ratio: 1; overflow: hidden; position: relative; }
+        .card-img-zone img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform .7s var(--transition);
+        }
+        .menu-card:hover .card-img-zone img { transform: scale(1.08); }
+
+        .badge-chef {
+            position: absolute; top: 16px; right: 16px;
+            background: var(--primary); color: var(--bg-deep);
+            font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; padding: 5px 12px; border-radius: 100px;
+        }
+        .badge-tag {
+            position: absolute; top: 16px; left: 16px;
+            background: rgba(11,28,24,.85); border: 1px solid rgba(255,160,60,.4);
+            color: #ffa03c; font-size: 0.7rem; padding: 4px 10px; border-radius: 100px;
+        }
+        .card-body { padding: 25px 28px 30px; }
+        .card-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .card-cat-tag { text-transform: uppercase; letter-spacing: 3px; font-size: 0.68rem; color: var(--primary); }
+        .card-dietary { display: flex; gap: 6px; }
+        .diet-dot {
+            width: 22px; height: 22px; border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 0.62rem; font-weight: 700; border: 1px solid; vertical-align: middle;
+        }
+        .diet-v  { border-color: #4caf50; color: #4caf50; }
+        .diet-vg { border-color: #8bc34a; color: #8bc34a; }
+        .diet-gf { border-color: #ff9800; color: #ff9800; }
+
+        .card-name { font-family: var(--font-heading); font-size: 1.7rem; margin-bottom: 8px; }
+        .card-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 20px; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; }
+        .card-price { font-family: var(--font-heading); font-size: 1.6rem; color: var(--primary); font-weight: 600; }
+        .add-btn {
+            width: 42px; height: 42px; border-radius: 50%;
+            border: 1px solid rgba(197,160,89,.3); background: none;
+            cursor: pointer; color: var(--primary); font-size: 1rem;
+            display: flex; align-items: center; justify-content: center;
+            transition: all .3s;
+        }
+        .add-btn:hover { background: var(--primary); color: var(--bg-deep); border-color: var(--primary); }
+
+        /* ══ List Items ══ */
+        .menu-list { display: flex; flex-direction: column; }
+        .menu-list-item {
+            display: grid; grid-template-columns: 100px 1fr auto;
+            gap: 24px; align-items: center; padding: 24px 0;
+            border-bottom: 1px dashed rgba(197,160,89,.12);
+            border-radius: 8px; transition: background .3s;
+        }
+        .menu-list-item:last-child { border-bottom: none; }
+        .menu-list-item:hover { background: rgba(197,160,89,.03); }
+        .list-img { width: 100px; height: 100px; border-radius: 50%; overflow: hidden; border: 1px solid rgba(197,160,89,.2); }
+        .list-img img { width: 100%; height: 100%; object-fit: cover; }
+        .list-info h4 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 5px; }
+        .list-info p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
+        .list-right { text-align: right; flex-shrink: 0; }
+        .list-price { font-family: var(--font-heading); font-size: 1.5rem; color: var(--primary); display: block; margin-bottom: 8px; }
+
+        /* ══ Chef Special Banner ══ */
+        .chef-special-banner {
+            margin: 80px 0; border: 1px solid rgba(197,160,89,.25);
+            border-radius: 24px; overflow: hidden;
+            display: grid; grid-template-columns: 1fr 1.2fr;
+        }
+        .csb-img { height: 440px; overflow: hidden; }
+        .csb-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s; }
+        .chef-special-banner:hover .csb-img img { transform: scale(1.05); }
+        .csb-content {
+            padding: 60px 50px; display: flex; flex-direction: column;
+            justify-content: center; background: var(--bg-offset);
+        }
+        .csb-content h2 { font-family: var(--font-heading); font-size: 3rem; margin-bottom: 20px; line-height: 1.1; }
+        .csb-content p { color: var(--text-muted); font-size: 1rem; line-height: 1.8; margin-bottom: 35px; }
+        .csb-price-row { display: flex; align-items: center; gap: 20px; margin-bottom: 35px; }
+        .csb-price { font-family: var(--font-heading); font-size: 2.5rem; color: var(--primary); }
+        .csb-was { font-size: 1.1rem; color: var(--text-muted); text-decoration: line-through; }
+
+        /* ══ Drinks Grid ══ */
+        .drinks-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 0;
+            border: 1px solid rgba(197,160,89,.15); border-radius: 20px; overflow: hidden;
+        }
+        .drink-row {
+            display: flex; align-items: center; padding: 28px 36px; gap: 20px;
+            border-bottom: 1px solid rgba(197,160,89,.1);
+            border-right: 1px solid rgba(197,160,89,.1);
+            transition: background .3s;
+        }
+        .drink-row:hover { background: rgba(197,160,89,.04); }
+        .drink-row:nth-child(even) { border-right: none; }
+        .drink-row:nth-last-child(-n+2) { border-bottom: none; }
+        .drink-icon {
+            width: 50px; height: 50px; flex-shrink: 0; border-radius: 50%;
+            background: rgba(197,160,89,.08); border: 1px solid rgba(197,160,89,.2);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--primary); font-size: 1rem;
+        }
+        .drink-info { flex: 1; }
+        .drink-info h5 { font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: 3px; }
+        .drink-info p { font-size: 0.82rem; color: var(--text-muted); }
+        .drink-price { font-family: var(--font-heading); font-size: 1.3rem; color: var(--primary); flex-shrink: 0; }
+
+        /* ══ Allergen Note ══ */
+        .allergen-note {
+            background: rgba(197,160,89,.05); border: 1px solid rgba(197,160,89,.15);
+            border-radius: 16px; padding: 30px 40px;
+            display: flex; gap: 20px; align-items: flex-start; margin-top: 80px;
+        }
+        .allergen-note i { color: var(--primary); font-size: 1.4rem; flex-shrink: 0; margin-top: 3px; }
+        .allergen-note p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.8; }
+        .allergen-note strong { color: var(--text-white); }
+
+        /* ══ Reservation Strip ══ */
+        .res-strip { background: var(--primary); padding: 70px 0; text-align: center; }
+        .res-strip h2 { font-family: var(--font-heading); font-size: clamp(2rem, 4vw, 3.5rem); color: var(--bg-deep); margin-bottom: 15px; }
+        .res-strip p { color: rgba(11,28,24,.65); font-size: 1rem; margin-bottom: 35px; }
+        .res-strip .btn-dark {
+            background: var(--bg-deep); color: var(--primary);
+            padding: 18px 45px; font-size: 0.8rem; letter-spacing: 2px;
+            text-transform: uppercase; font-weight: 700;
+            display: inline-block; text-decoration: none;
+            transition: all .4s var(--transition);
+        }
+        .res-strip .btn-dark:hover { background: var(--text-white); color: var(--bg-deep); transform: translateY(-4px); }
+
+        /* ══ Responsive ══ */
+        @media (max-width: 1024px) {
+            .featured-row { grid-template-columns: 1fr 1fr; }
+            .chef-special-banner { grid-template-columns: 1fr; }
+            .csb-img { height: 300px; }
+            .drinks-grid { grid-template-columns: 1fr; }
+            .drink-row { border-right: none !important; }
+            .drink-row:nth-last-child(-n+2) { border-bottom: 1px solid rgba(197,160,89,.1); }
+            .drink-row:last-child { border-bottom: none; }
+        }
+        @media (max-width: 768px) {
+            .featured-row { grid-template-columns: 1fr; }
+            .menu-list-item { grid-template-columns: 70px 1fr; }
+            .list-right { display: none; }
+            .cat-count { display: none; }
+            .filter-btn { padding: 18px 18px; font-size: 0.72rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-content text-center">
+            <h1 class="logo" style="color: var(--primary);">STACKLY</h1>
+            <div style="width: 220px; height: 1px; background: rgba(255,255,255,0.08); margin: 20px auto; overflow: hidden;">
+                <div class="loader-bar"></div>
+            </div>
+            <p style="text-transform: uppercase; letter-spacing: 5px; font-size: 0.75rem; color: var(--text-muted);">Setting the table…</p>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="logo">STACKLY</a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="menu.html" class="nav-link" style="color: var(--primary);">Menu</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="blogs.html" class="nav-link">Blogs</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+            <div class="nav-cta" style="display:block;">
+                <a href="login.html" class="btn btn-primary" style="padding: 10px 22px; font-size: 0.78rem;">Login</a>
+            </div>
+            <button class="mobile-toggle"><span></span><span></span><span></span></button>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- Page Hero -->
+        <section class="page-hero">
+            <div class="page-hero-bg">
+                <img src="images/image_10.webp" alt="STACKLY Cuisine">
+            </div>
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="index.html">Home</a>
+                    <i class="fa fa-angle-right" style="font-size:.65rem;"></i>
+                    <span>Menu</span>
+                </div>
+                <h1 class="page-hero-title anim-title">Our <span class="text-gold">Menu</span></h1>
+                <p class="page-hero-sub">From the first bite to the final flourish — every dish is a conversation between tradition and imagination.</p>
+            </div>
+        </section>
+
+        <!-- Sticky Filter Bar -->
+        <div class="filter-bar" id="filterBar">
+            <div class="container">
+                <div class="filter-inner">
+                    <button class="filter-btn active" data-cat="all"><i class="fa fa-border-all"></i>All</button>
+                    <button class="filter-btn" data-cat="starters"><i class="fa fa-leaf"></i>Starters</button>
+                    <button class="filter-btn" data-cat="mains"><i class="fa fa-utensils"></i>Mains</button>
+                    <button class="filter-btn" data-cat="specials"><i class="fa fa-fire-flame-curved"></i>Chef's Specials</button>
+                    <button class="filter-btn" data-cat="desserts"><i class="fa fa-ice-cream"></i>Desserts</button>
+                    <button class="filter-btn" data-cat="drinks"><i class="fa fa-wine-glass"></i>Drinks</button>
+                    <button class="filter-btn" data-cat="brunch"><i class="fa fa-sun"></i>Brunch</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-page-body">
+            <div class="container">
+
+                <!-- ══════════ STARTERS ══════════ -->
+                <div class="menu-category" id="starters" data-section="starters">
+                    <div class="cat-header">
+                        <div>
+                            <p class="cat-label">Section 01</p>
+                            <h2 class="cat-title">Starters &<br><em class="text-gold">Appetisers</em></h2>
+                        </div>
+                        <span class="cat-count">01</span>
+                    </div>
+                    <div class="featured-row">
+                        <div class="menu-card">
+                            <div class="card-img-zone">
+                                <img src="images/image_9.webp" alt="Butternut Pumpkin">
+                                <span class="badge-tag">🌶 Spicy</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-meta">
+                                    <span class="card-cat-tag">Appetiser</span>
+                                    <div class="card-dietary">
+                                        <span class="diet-dot diet-v" title="Vegetarian">V</span>
+                                        <span class="diet-dot diet-gf" title="Gluten-Free">GF</span>
+                                    </div>
+                                </div>
+                                <h3 class="card-name">Butternut Pumpkin</h3>
+                                <p class="card-desc">Avocados with crab meat, red onion, crab salad stuffed bell pepper, seasonal vegetables and aged cheeses.</p>
+                                <div class="card-footer">
+                                    <span class="card-price">₹1,850</span>
+                                    <button class="add-btn"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <div class="card-img-zone">
+                                <img src="images/image_5.webp" alt="Truffle Arancini">
+                            </div>
+                            <div class="card-body">
+                                <div class="card-meta">
+                                    <span class="card-cat-tag">Appetiser</span>
+                                    <div class="card-dietary"><span class="diet-dot diet-v">V</span></div>
+                                </div>
+                                <h3 class="card-name">Truffle Arancini</h3>
+                                <p class="card-desc">Crispy saffron risotto balls filled with black truffle, mozzarella, served with roasted tomato aioli.</p>
+                                <div class="card-footer">
+                                    <span class="card-price">₹2,100</span>
+                                    <button class="add-btn"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <div class="card-img-zone">
+                                <img src="images/image_6.webp" alt="Seared Scallops">
+                                <span class="badge-chef">Chef's Pick</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-meta">
+                                    <span class="card-cat-tag">Appetiser</span>
+                                    <div class="card-dietary"><span class="diet-dot diet-gf">GF</span></div>
+                                </div>
+                                <h3 class="card-name">Seared Scallops</h3>
+                                <p class="card-desc">Hand-dived scallops, cauliflower purée, crispy capers, burnt butter, and a drizzle of lemon oil.</p>
+                                <div class="card-footer">
+                                    <span class="card-price">₹3,400</span>
+                                    <button class="add-btn"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-list">
+                        <div class="menu-list-item">
+                            <div class="list-img"><img src="images/image_14.webp" alt="Soup"></div>
+                            <div class="list-info">
+                                <h4>Velouté du Jour</h4>
+                                <p>Chef's daily soup — silky, seasonal, finished with crème fraîche and micro herbs.</p>
+                            </div>
+                            <div class="list-right">
+                                <span class="list-price">₹950</span>
+                                <button class="add-btn"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <div class="menu-list-item">
+                            <div class="list-img"><img src="images/image_15.webp" alt="Tartare"></div>
+                            <div class="list-info">
+                                <h4>Beef Tartare</h4>
+                                <p>Hand-cut wagyu tartare, aged mustard, cornichons, egg yolk, and toasted brioche soldiers.</p>
+                            </div>
+                            <div class="list-right">
+                                <span class="list-price">₹2,850</span>
+                                <button class="add-btn"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <div class="menu-list-item">
+                            <div class="list-img"><img src="images/image_16.webp" alt="Bruschetta"></div>
+                            <div class="list-info">
+                                <h4>Heritage Tomato Bruschetta</h4>
+                                <p>Slow-roasted heritage tomatoes, whipped ricotta, basil oil, and flaked sea salt on grilled sourdough.</p>
+                            </div>
+                            <div class="list-right">
+                                <span class="list-price">₹1,400</span>
+                                <button class="add-btn"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══════════ CHEF'S SPECIAL BANNER ══════════ -->
+                <div class="chef-special-banner" id="specials" data-section="specials">
+                    <div class="csb-img"><img src="images/image_11.webp" alt="Chef Lorenzo"></div>
+                    <div class="csb-content">
+                        <p class="card-cat" style="margin-bottom:16px;">✦ Chef Lorenzo's Special ✦</p>
+                        <h2>The Omakase<br><em class="text-gold">Experience</em></h2>
+                        <p>A 9-course journey through Chef Lorenzo's culinary imagination — guided, spontaneous, built around the finest produce available that day. No two evenings are ever the same.</p>
+                        <div class="csb-price-row">
+                            <span class="csb-price">₹14,000</span>
+                            <span class="csb-was">₹18,000</span>
+                            <span class="card-cat" style="font-size:.68rem;">Per Person</span>
+                        </div>
+                        <a href="index.html#contact" class="btn btn-primary" style="align-self:flex-start;">Reserve Omakase</a>
+                    </div>
+                </div>
+
+                <!-- ══════════ MAINS ══════════ -->
+                <div class="menu-category" id="mains" data-section="mains">
+                    <div class="cat-header">
+                        <div>
+                            <p class="cat-label">Section 02</p>
+                            <h2 class="cat-title">Main<br><em class="text-gold">Courses</em></h2>
+                        </div>
+                        <span class="cat-count">02</span>
+                    </div>
+                    <div class="featured-row">
+                        <div class="menu-card">
+                            <div class="card-img-zone">
+                                <img src="images/image_7.webp" alt="Greek Salad">
+                                <span class="badge-chef">Best Seller</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-meta">
+                                    <span class="card-cat-tag">Main Dish</span>
+                                    <div class="card-dietary">
+                                        <span class="diet-dot diet-v">V</span>
+                                        <span class="diet-dot diet-gf">GF</span>
+                                    </div>
+                                </div>
+                                <h3 class="card-name">Greek Salad Royale</h3>
+                                <p class="card-desc">Panko bread crumbs, pine nuts, parsley, sun-dried tomatoes and premium feta on a crunchy base.</p>
+                                <div class="card-footer">
+                                    <span class="card-price">₹2,450</span>
+                                    <button class="add-btn"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <div class="card-img-zone">
+                                <img src="images/image_8.webp" alt="Wagyu">
+                                <span class="badge-chef">Chef's Pick</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-meta">
+                                    <span class="card-cat-tag">Signature</span>
+                                    <div class="card-dietary"><span class="diet-dot diet-gf">GF</span></div>
+                                </div>
+                                <h3 class="card-name">Tokusen Wagyu</h3>
+                                <p class="card-desc">A5 wagyu, truffle jus, bone marrow butter, roasted heirloom carrots and potato gratin.</p>
+                                <div class="card-footer">
+                                    <span class="card-price">₹4,200</span>
+                                    <button class="add-btn"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <div class="card-img-zone">
+                                <img src="images/image_13.webp" alt="Lobster Risotto">
+                                <span class="badge-tag">New</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-meta">
+                                    <span class="card-cat-tag">Seafood</span>
+                                    <div class="card-dietary"><span class="diet-dot diet-gf">GF</span></div>
+                                </div>
+                                <h3 class="card-name">Lobster Risotto</h3>
+                                <p class="card-desc">Whole Canadian lobster tail, saffron arborio risotto, bisque reduction, and a Parmesan crisp.</p>
+                                <div class="card-footer">
+                                    <span class="card-price">₹5,600</span>
+                                    <button class="add-btn"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-list">
+                        <div class="menu-list-item">
+                            <div class="list-img"><img src="images/image_12.webp" alt="Duck"></div>
+                            <div class="list-info">
+                                <h4>Duck Confit</h4>
+                                <p>Slow-cooked duck leg, cherry gastrique, wilted spinach, and dauphinoise potatoes.</p>
+                            </div>
+                            <div class="list-right">
+                                <span class="list-price">₹3,800</span>
+                                <button class="add-btn"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <div class="menu-list-item">
+                            <div class="list-img"><img src="images/image_5.webp" alt="Wellington"></div>
+                            <div class="list-info">
+                                <h4>Wild Mushroom Wellington</h4>
+                                <p>Porcini and truffle duxelles, golden puff pastry, port reduction and seasonal greens.</p>
+                            </div>
+                            <div class="list-right">
+                                <span class="list-price">₹3,200</span>
+                                <button class="add-btn"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <div class="menu-list-item">
+                            <div class="list-img"><img src="images/image_6.webp" alt="Sea Bass"></div>
+                            <div class="list-info">
+                                <h4>Pan-Seared Sea Bass</h4>
+                                <p>Crispy-skinned sea bass, saffron beurre blanc, fennel confit, and samphire.</p>
+                            </div>
+                            <div class="list-right">
+                                <span class="list-price">₹4,100</span>
+                                <button class="add-btn"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <div class="menu-list-item">
+                            <div class="list-img"><img src="images/image_14.webp" alt="Lamb"></div>
+                            <div class="list-info">
+                                <h4>Herb-Crusted Rack of Lamb</h4>
+                                <p>Two-bone rack, pistachio and herb crust, pomme purée, minted pea coulis and rosemary jus.</p>
+                            </div>
+                            <div class="list-right">
+                                <span class="list-price">₹5,200</span>
+                                <button class="add-btn"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Marquee strip -->
+                <div class="marquee-section text-gold" style="margin: 60px -5% !important; border-radius: 0;">
+                    <div class="marquee-content">
+                        <span>STARTERS</span> ✦ <span>MAINS</span> ✦ <span>DESSERTS</span> ✦ <span>COCKTAILS</span> ✦ <span>FINE WINES</span> ✦ <span>CHEF'S SPECIALS</span> ✦ <span>SEASONAL MENU</span> ✦ <span>STARTERS</span> ✦ <span>MAINS</span> ✦ <span>DESSERTS</span> ✦
+                    </div>
+                </div>
+
+                <!-- ══════════ DESSERTS ══════════ -->
+                <div class="menu-category" id="desserts" data-section="desserts">
+                    <div class="cat-header">
+                        <div>
+                            <p class="cat-label">Section 03</p>
+                            <h2 class="cat-title">Sweet<br><em class="text-gold">Endings</em></h2>
+                        </div>
+                        <span class="cat-count">03</span>
+                    </div>
+                    <div class="featured-row">
+                        <div class="menu-card">
+                            <div class="card-img-zone">
+                                <img src="images/image_8.webp" alt="Chocolate Soufflé">
+                                <span class="badge-chef">Signature</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-meta">
+                                    <span class="card-cat-tag">Dessert</span>
+                                    <div class="card-dietary"><span class="diet-dot diet-v">V</span></div>
+                                </div>
+                                <h3 class="card-name">Dark Choc Soufflé</h3>
+                                <p class="card-desc">Valrhona 70% dark chocolate soufflé, Madagascan vanilla bean ice cream and salted caramel.</p>
+                                <div class="card-footer">
+                                    <span class="card-price">₹1,600</span>
+                                    <button class="add-btn"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <div class="card-img-zone">
+                                <img src="images/image_9.webp" alt="Crème Brûlée">
+                            </div>
+                            <div class="card-body">
+                                <div class="card-meta">
+                                    <span class="card-cat-tag">Dessert</span>
+                                    <div class="card-dietary">
+                                        <span class="diet-dot diet-v">V</span>
+                                        <span class="diet-dot diet-gf">GF</span>
+                                    </div>
+                                </div>
+                                <h3 class="card-name">Passion Crème Brûlée</h3>
+                                <p class="card-desc">Classic crème brûlée infused with passionfruit, toasted coconut tuile, and mango coulis.</p>
+                                <div class="card-footer">
+                                    <span class="card-price">₹1,350</span>
+                                    <button class="add-btn"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <div class="card-img-zone">
+                                <img src="images/image_7.webp" alt="Pavlova">
+                                <span class="badge-tag">New</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-meta">
+                                    <span class="card-cat-tag">Dessert</span>
+                                    <div class="card-dietary">
+                                        <span class="diet-dot diet-v">V</span>
+                                        <span class="diet-dot diet-gf">GF</span>
+                                    </div>
+                                </div>
+                                <h3 class="card-name">Rose Pavlova</h3>
+                                <p class="card-desc">Crisp meringue, chantilly cream, rosewater, seasonal berries and edible gold leaf.</p>
+                                <div class="card-footer">
+                                    <span class="card-price">₹1,750</span>
+                                    <button class="add-btn"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-list">
+                        <div class="menu-list-item">
+                            <div class="list-img"><img src="images/image_15.webp" alt="Cheese"></div>
+                            <div class="list-info">
+                                <h4>Artisan Cheese Board</h4>
+                                <p>Chef's selection of 5 artisan cheeses, quince paste, honeycomb, walnuts, and grapes.</p>
+                            </div>
+                            <div class="list-right">
+                                <span class="list-price">₹2,200</span>
+                                <button class="add-btn"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                        <div class="menu-list-item">
+                            <div class="list-img"><img src="images/image_16.webp" alt="Gelato"></div>
+                            <div class="list-info">
+                                <h4>STACKLY Gelato Trio</h4>
+                                <p>Three scoops of rotating seasonal flavours from our in-house gelato kitchen.</p>
+                            </div>
+                            <div class="list-right">
+                                <span class="list-price">₹900</span>
+                                <button class="add-btn"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══════════ DRINKS ══════════ -->
+                <div class="menu-category" id="drinks" data-section="drinks">
+                    <div class="cat-header">
+                        <div>
+                            <p class="cat-label">Section 04</p>
+                            <h2 class="cat-title">Drinks &<br><em class="text-gold">Cocktails</em></h2>
+                        </div>
+                        <span class="cat-count">04</span>
+                    </div>
+                    <div class="drinks-grid">
+                        <div class="drink-row">
+                            <div class="drink-icon"><i class="fa fa-martini-glass"></i></div>
+                            <div class="drink-info">
+                                <h5>Velvet Midnight</h5>
+                                <p>Blackberry, Gin, Smoked Rosemary, Lemon</p>
+                            </div>
+                            <span class="drink-price">₹950</span>
+                        </div>
+                        <div class="drink-row">
+                            <div class="drink-icon"><i class="fa fa-wine-glass"></i></div>
+                            <div class="drink-info">
+                                <h5>Golden Orchid</h5>
+                                <p>Mezcal, Passionfruit, Agave, Firewater Bitters</p>
+                            </div>
+                            <span class="drink-price">₹1,150</span>
+                        </div>
+                        <div class="drink-row">
+                            <div class="drink-icon"><i class="fa fa-bottle-droplet"></i></div>
+                            <div class="drink-info">
+                                <h5>The Alchemist</h5>
+                                <p>Aged Whiskey, Maple, Orange Peel, Smoke</p>
+                            </div>
+                            <span class="drink-price">₹1,400</span>
+                        </div>
+                        <div class="drink-row">
+                            <div class="drink-icon"><i class="fa fa-champagne-glasses"></i></div>
+                            <div class="drink-info">
+                                <h5>Rose Eclipse</h5>
+                                <p>Champagne, Elderflower, Rose, Raspberry</p>
+                            </div>
+                            <span class="drink-price">₹1,800</span>
+                        </div>
+                        <div class="drink-row">
+                            <div class="drink-icon"><i class="fa fa-mug-hot"></i></div>
+                            <div class="drink-info">
+                                <h5>Spiced Cold Brew</h5>
+                                <p>Single-origin cold brew, cardamom, cinnamon cream</p>
+                            </div>
+                            <span class="drink-price">₹650</span>
+                        </div>
+                        <div class="drink-row">
+                            <div class="drink-icon"><i class="fa fa-seedling"></i></div>
+                            <div class="drink-info">
+                                <h5>Garden Mule (N/A)</h5>
+                                <p>Cucumber, Mint, Ginger Beer, Lime — Non-alcoholic</p>
+                            </div>
+                            <span class="drink-price">₹550</span>
+                        </div>
+                        <div class="drink-row">
+                            <div class="drink-icon"><i class="fa fa-wine-bottle"></i></div>
+                            <div class="drink-info">
+                                <h5>Reserve Red Wine</h5>
+                                <p>Sommelier's weekly selection — glass or bottle</p>
+                            </div>
+                            <span class="drink-price">₹1,200</span>
+                        </div>
+                        <div class="drink-row">
+                            <div class="drink-icon"><i class="fa fa-star"></i></div>
+                            <div class="drink-info">
+                                <h5>STACKLY Pairing Flight</h5>
+                                <p>6 curated pours matched to your menu — ask your sommelier</p>
+                            </div>
+                            <span class="drink-price">₹4,500</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══════════ BRUNCH ══════════ -->
+                <div class="menu-category" id="brunch" data-section="brunch">
+                    <div class="cat-header">
+                        <div>
+                            <p class="cat-label">Section 05</p>
+                            <h2 class="cat-title">Weekend<br><em class="text-gold">Brunch</em></h2>
+                        </div>
+                        <span class="cat-count">05</span>
+                    </div>
+                    <p style="color:var(--text-muted); margin-bottom:40px; font-size:1rem;">Available Saturday &amp; Sunday &middot; 10:00 AM – 2:00 PM</p>
+                    <div class="featured-row">
+                        <div class="menu-card">
+                            <div class="card-img-zone">
+                                <img src="images/image_2.webp" alt="Eggs Benedict">
+                                <span class="badge-chef">Weekend Only</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-meta">
+                                    <span class="card-cat-tag">Brunch</span>
+                                    <div class="card-dietary"><span class="diet-dot diet-v">V</span></div>
+                                </div>
+                                <h3 class="card-name">Eggs Benedict Royal</h3>
+                                <p class="card-desc">Poached eggs, house-smoked salmon, wilted spinach, brioche, and a lemon hollandaise.</p>
+                                <div class="card-footer">
+                                    <span class="card-price">₹1,950</span>
+                                    <button class="add-btn"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <div class="card-img-zone">
+                                <img src="images/image_3.webp" alt="Avocado Toast">
+                            </div>
+                            <div class="card-body">
+                                <div class="card-meta">
+                                    <span class="card-cat-tag">Brunch</span>
+                                    <div class="card-dietary">
+                                        <span class="diet-dot diet-vg">VG</span>
+                                        <span class="diet-dot diet-gf">GF</span>
+                                    </div>
+                                </div>
+                                <h3 class="card-name">Avocado Cloud Toast</h3>
+                                <p class="card-desc">Smashed hass avocado, cloud bread, heirloom tomatoes, microgreens, and chilli flakes.</p>
+                                <div class="card-footer">
+                                    <span class="card-price">₹1,450</span>
+                                    <button class="add-btn"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="menu-card">
+                            <div class="card-img-zone">
+                                <img src="images/image_4.webp" alt="French Toast">
+                            </div>
+                            <div class="card-body">
+                                <div class="card-meta">
+                                    <span class="card-cat-tag">Brunch</span>
+                                    <div class="card-dietary"><span class="diet-dot diet-v">V</span></div>
+                                </div>
+                                <h3 class="card-name">Brioche French Toast</h3>
+                                <p class="card-desc">Thick-cut brioche, salted caramel, fresh seasonal berries, crème chantilly, and maple syrup.</p>
+                                <div class="card-footer">
+                                    <span class="card-price">₹1,700</span>
+                                    <button class="add-btn"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Allergen Note -->
+                <div class="allergen-note">
+                    <i class="fa fa-circle-info"></i>
+                    <p>
+                        <strong>Dietary Key:</strong>&nbsp;
+                        <span class="diet-dot diet-v" style="width:20px;height:20px;font-size:.65rem;">V</span> Vegetarian &nbsp;
+                        <span class="diet-dot diet-vg" style="width:20px;height:20px;font-size:.6rem;">VG</span> Vegan &nbsp;
+                        <span class="diet-dot diet-gf" style="width:20px;height:20px;font-size:.6rem;">GF</span> Gluten-Free &nbsp;—&nbsp;
+                        All dishes are prepared in a kitchen handling <strong>nuts, dairy, shellfish, and gluten</strong>.
+                        Please inform your server of any allergies before ordering.
+                        Prices include all applicable taxes. <strong>Menu items are subject to seasonal change.</strong>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Reservation Strip -->
+        <div class="res-strip">
+            <div class="container">
+                <h2>Ready to Dine?</h2>
+                <p>Reserve your table and let us take care of the rest.</p>
+                <a href="" class="btn-dark">Book a Table</a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer text-center" style="padding: 100px 0 50px; background: rgba(14,36,31,1); border-top: 1px solid var(--glass);">
+        <div class="container">
+            <h2 class="logo" style="font-size:3rem; margin-bottom:20px;">STACKLY</h2>
+            <p style="opacity:.5; margin-bottom:40px; font-style:italic;">"Modern Gastronomy. Classic Soul."</p>
+            <div style="display:flex; justify-content:center; gap:30px; margin-bottom:40px; flex-wrap:wrap;">
+                <a href="index.html#about" style="color:var(--text-white); text-decoration:none; text-transform:uppercase; font-size:.85rem; letter-spacing:1px;">About Us</a>
+                <a href="menu.html" style="color:var(--primary); text-decoration:none; text-transform:uppercase; font-size:.85rem; letter-spacing:1px;">Menu</a>
+                <a href="services.html" style="color:var(--text-white); text-decoration:none; text-transform:uppercase; font-size:.85rem; letter-spacing:1px;">Services</a>
+                <a href="index.html#chef" style="color:var(--text-white); text-decoration:none; text-transform:uppercase; font-size:.85rem; letter-spacing:1px;">Blogs</a>
+                <a href="index.html#contact" style="color:var(--text-white); text-decoration:none; text-transform:uppercase; font-size:.85rem; letter-spacing:1px;">Contact</a>
+            </div>
+            <div style="display:flex; justify-content:center; gap:20px; margin-bottom:40px;">
+                <a href="404.html" style="color:var(--text-white);"><i class="fa-brands fa-instagram"></i></a>
+                <a href="404.html" style="color:var(--text-white);"><i class="fa-brands fa-facebook"></i></a>
+                <a href="404.html" style="color:var(--text-white);"><i class="fa-brands fa-twitter"></i></a>
+                <a href="404.html" style="color:var(--text-white);"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+            <p style="font-size:.8rem; opacity:.4;">&copy; 2026 STACKLY Restaurant. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // ── Filter Tabs ──
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const categories = document.querySelectorAll('.menu-category');
+        const chefBanner = document.querySelector('.chef-special-banner');
+        const marqueeStrip = document.querySelector('.marquee-section');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const cat = btn.dataset.cat;
+
+                if (cat === 'all') {
+                    categories.forEach(c => c.style.display = '');
+                    if (chefBanner) chefBanner.style.display = '';
+                    if (marqueeStrip) marqueeStrip.style.display = '';
+                } else if (cat === 'specials') {
+                    categories.forEach(c => c.style.display = 'none');
+                    if (chefBanner) chefBanner.style.display = '';
+                    if (marqueeStrip) marqueeStrip.style.display = 'none';
+                } else {
+                    if (chefBanner) chefBanner.style.display = 'none';
+                    if (marqueeStrip) marqueeStrip.style.display = 'none';
+                    categories.forEach(c => {
+                        c.style.display = (c.dataset.section === cat) ? '' : 'none';
+                    });
+                }
+                document.querySelector('.menu-page-body').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Highlight active tab on scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('[data-section]');
+            let current = '';
+            sections.forEach(s => {
+                if (s.style.display === 'none') return;
+                if (s.getBoundingClientRect().top <= 180) current = s.dataset.section;
+            });
+            if (current) {
+                filterBtns.forEach(b => b.classList.toggle('active', b.dataset.cat === current));
+            }
+        });
+
+        // Add-to-order micro feedback
+        document.querySelectorAll('.add-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                this.innerHTML = '<i class="fa fa-check"></i>';
+                this.style.background = 'var(--primary)';
+                this.style.color = 'var(--bg-deep)';
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fa fa-plus"></i>';
+                    this.style.background = '';
+                    this.style.color = '';
+                }, 1500);
+            });
+        });
+    </script>
+</body>
+</html>

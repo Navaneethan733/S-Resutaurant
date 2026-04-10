@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | STACKLY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .auth-page {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        /* ── Right Visual Panel ── */
+        .auth-visual {
+            position: relative;
+            overflow: hidden;
+            order: 2;
+        }
+        .auth-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.05);
+            transition: transform 12s ease;
+        }
+        .auth-visual::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                225deg,
+                rgba(11,28,24,0.8) 0%,
+                rgba(11,28,24,0.35) 50%,
+                rgba(197,160,89,0.06) 100%
+            );
+        }
+        .auth-visual-content {
+            position: absolute;
+            inset: 0;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px;
+        }
+        .auth-visual-quote { margin-top: auto; }
+        .auth-visual-quote blockquote {
+            font-family: var(--font-heading);
+            font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+            font-style: italic;
+            line-height: 1.4;
+            color: var(--text-white);
+            margin-bottom: 20px;
+            max-width: 480px;
+        }
+        .auth-visual-quote cite {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--primary);
+            font-style: normal;
+        }
+
+        /* Perks list on visual */
+        .perks-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 50px;
+        }
+        .perks-list li {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 0.9rem;
+            color: rgba(254,254,254,0.85);
+        }
+        .perks-list li i {
+            width: 28px;
+            height: 28px;
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 0.7rem;
+            flex-shrink: 0;
+        }
+
+        /* Decorative arches */
+        .visual-arch {
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 300px;
+            height: 380px;
+            border-radius: 200px 200px 0 0;
+            border: 1px solid rgba(197,160,89,0.25);
+            z-index: 5;
+            pointer-events: none;
+        }
+        .visual-arch-2 {
+            position: absolute;
+            bottom: 60px;
+            left: -50px;
+            width: 180px;
+            height: 220px;
+            border-radius: 120px 120px 0 0;
+            border: 1px solid rgba(197,160,89,0.12);
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* ── Left Form Panel ── */
+        .auth-form-panel {
+            background: var(--bg-deep);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 50px 70px;
+            position: relative;
+            overflow: hidden;
+            order: 1;
+        }
+        .auth-form-panel::before {
+            content: 'JOIN';
+            position: absolute;
+            bottom: -60px;
+            left: -20px;
+            font-family: var(--font-heading);
+            font-size: 14rem;
+            font-weight: 700;
+            color: rgba(197,160,89,0.025);
+            pointer-events: none;
+            white-space: nowrap;
+            line-height: 1;
+        }
+
+        .auth-nav-link {
+            position: absolute;
+            top: 40px;
+            right: 50px;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .auth-nav-link:hover { color: var(--primary); }
+
+        .auth-logo {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-white);
+            text-decoration: none;
+            margin-bottom: 40px;
+            display: block;
+        }
+
+        .auth-back-btn {
+            position: absolute;
+            top: 40px;
+            left: 50px;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 20;
+        }
+        .auth-back-btn:hover {
+            color: var(--primary);
+            transform: translateX(-5px);
+        }
+
+        .auth-heading {
+            font-family: var(--font-heading);
+            font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+            line-height: 1.1;
+            margin-bottom: 10px;
+        }
+        .auth-subheading {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            margin-bottom: 35px;
+            line-height: 1.7;
+        }
+        .auth-subheading a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .auth-subheading a:hover { text-decoration: underline; }
+
+        /* Two-column row for name fields */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        /* ── Form Fields ── */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .form-label {
+            display: block;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            transition: color 0.3s;
+        }
+        .form-group:focus-within .form-label { color: var(--primary); }
+
+        .form-input {
+            width: 100%;
+            background: rgba(14,36,31,0.6);
+            border: 1px solid rgba(197,160,89,0.2);
+            border-bottom: 2px solid rgba(197,160,89,0.2);
+            outline: none;
+            padding: 15px 20px;
+            color: var(--text-white);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            transition: all 0.35s var(--transition);
+        }
+        .form-input::placeholder { color: rgba(166,177,175,0.5); }
+        .form-input:focus {
+            border-color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: rgba(197,160,89,0.04);
+        }
+
+        /* Password toggle */
+        .input-with-icon { position: relative; }
+        .input-with-icon .form-input { padding-right: 50px; }
+        .toggle-pw {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 0;
+            transition: color 0.3s;
+        }
+        .toggle-pw:hover { color: var(--primary); }
+
+        /* Password strength meter */
+        .pw-strength {
+            margin-top: 8px;
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+        .pw-bar {
+            height: 3px;
+            flex: 1;
+            background: rgba(197,160,89,0.12);
+            transition: background 0.4s;
+        }
+        .pw-label {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            min-width: 50px;
+            text-align: right;
+        }
+        .pw-bar.weak   { background: #e05252; }
+        .pw-bar.medium { background: #e8a838; }
+        .pw-bar.strong { background: #5ab585; }
+
+        /* Terms checkbox */
+        .check-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            user-select: none;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        .check-label input[type="checkbox"] { display: none; }
+        .custom-check {
+            width: 18px;
+            height: 18px;
+            border: 1px solid rgba(197,160,89,0.35);
+            flex-shrink: 0;
+            position: relative;
+            margin-top: 2px;
+            transition: all 0.3s;
+        }
+        .check-label input:checked ~ .custom-check {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+        .check-label input:checked ~ .custom-check::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 2px;
+            width: 6px;
+            height: 10px;
+            border-right: 2px solid var(--bg-deep);
+            border-bottom: 2px solid var(--bg-deep);
+            transform: rotate(45deg);
+        }
+        .check-label a { color: var(--primary); text-decoration: none; }
+        .check-label a:hover { text-decoration: underline; }
+
+        /* Submit button */
+        .auth-btn {
+            width: 100%;
+            background: var(--primary);
+            border: none;
+            padding: 18px;
+            color: var(--bg-deep);
+            font-family: var(--font-body);
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s var(--transition);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+        .auth-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--text-white);
+            transform: translateX(-100%);
+            transition: transform 0.4s var(--transition);
+        }
+        .auth-btn:hover::before { transform: translateX(0); }
+        .auth-btn span { position: relative; z-index: 2; }
+
+        /* Divider */
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(197,160,89,0.15);
+        }
+        .auth-divider span {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        /* Social login */
+        .social-auth {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 13px 18px;
+            border: 1px solid rgba(197,160,89,0.2);
+            background: transparent;
+            color: var(--text-white);
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.35s var(--transition);
+            text-decoration: none;
+        }
+        .social-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .social-btn i { font-size: 1rem; }
+
+        /* ── Validation ── */
+        .field-error {
+            font-size: 0.74rem;
+            color: #e05252;
+            margin-top: 6px;
+            display: none;
+        }
+        .form-group.has-error .form-input { border-color: #e05252; }
+        .form-group.has-error .form-label { color: #e05252; }
+        .form-group.has-error .field-error { display: block; }
+
+        /* ── Responsive ── */
+        @media (max-width: 1000px) {
+            .auth-page { grid-template-columns: 1fr; }
+            .auth-visual { display: none; }
+            .auth-form-panel { padding: 80px 35px 50px; order: 1; }
+            .auth-back-btn { top: 30px; left: 35px; }
+            .auth-nav-link { top: 30px; right: 35px; }
+        }
+        @media (max-width: 540px) {
+            .form-row { grid-template-columns: 1fr; }
+            .auth-form-panel { padding: 100px 20px 40px; }
+            .auth-back-btn { top: 25px; left: 20px; font-size: 0.7rem; }
+            .auth-nav-link { top: 25px; right: 20px; font-size: 0.7rem; }
+            .auth-logo { margin-bottom: 30px; font-size: 1.6rem; }
+            .auth-heading { font-size: 1.8rem; line-height: 1.2; }
+            .auth-subheading { margin-bottom: 25px; font-size: 0.85rem; }
+            .social-auth { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-content text-center">
+            <h1 class="logo" style="font-size: 4rem; opacity: 0.5;">STACKLY</h1>
+            <div style="width: 200px; height: 1px; background: rgba(255,255,255,0.1); margin: 20px auto; overflow: hidden;">
+                <div class="loader-bar" style="width: 0%; height: 100%; background: var(--primary);"></div>
+            </div>
+            <p style="text-transform: uppercase; letter-spacing: 5px; font-size: 0.8rem;">Preparing your seat...</p>
+        </div>
+    </div>
+
+    <div class="auth-page">
+
+        <!-- Left Form Panel -->
+        <div class="auth-form-panel">
+            <a href="index.html" class="auth-back-btn"><i class="fa fa-arrow-left"></i> Go Back</a>
+            <a href="login.html" class="auth-nav-link">Already a member? Sign In →</a>
+
+            <a href="index.html" class="auth-logo">STACKLY</a>
+
+            <h1 class="auth-heading">Join the<br><em style="color: var(--primary);">Table.</em></h1>
+            <p class="auth-subheading">
+                Create your STACKLY account for seamless reservations and exclusive member perks.<br>
+                Already a member? <a href="login.html">Sign in here</a>
+            </p>
+
+            <form id="signupForm" novalidate>
+                <!-- Name Row -->
+                <div class="form-row">
+                    <div class="form-group" id="group-fname">
+                        <label class="form-label" for="fname">First Name</label>
+                        <input class="form-input" type="text" id="fname" placeholder="First name" autocomplete="given-name">
+                        <span class="field-error">First name is required.</span>
+                    </div>
+                    <div class="form-group" id="group-lname">
+                        <label class="form-label" for="lname">Last Name</label>
+                        <input class="form-input" type="text" id="lname" placeholder="Last name" autocomplete="family-name">
+                        <span class="field-error">Last name is required.</span>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group" id="group-email">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input class="form-input" type="email" id="email" placeholder="you@example.com" autocomplete="email">
+                    <span class="field-error" id="err-email">Please enter a valid email address.</span>
+                </div>
+
+                <!-- Phone -->
+                <div class="form-group" id="group-phone">
+                    <label class="form-label" for="phone">Phone Number</label>
+                    <input class="form-input" type="tel" id="phone" placeholder="+91 98765 43210" autocomplete="tel">
+                    <span class="field-error">Please enter a valid phone number.</span>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group" id="group-password">
+                    <label class="form-label" for="password">Password</label>
+                    <div class="input-with-icon">
+                        <input class="form-input" type="password" id="password" placeholder="Create a strong password" autocomplete="new-password">
+                        <button type="button" class="toggle-pw" onclick="togglePw('password', this)">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="pw-strength" id="pwStrength" style="display: none;">
+                        <div class="pw-bar" id="bar1"></div>
+                        <div class="pw-bar" id="bar2"></div>
+                        <div class="pw-bar" id="bar3"></div>
+                        <span class="pw-label" id="pwLabel"></span>
+                    </div>
+                    <span class="field-error">Password must be at least 8 characters.</span>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group" id="group-confirm">
+                    <label class="form-label" for="confirm">Confirm Password</label>
+                    <div class="input-with-icon">
+                        <input class="form-input" type="password" id="confirm" placeholder="Repeat your password" autocomplete="new-password">
+                        <button type="button" class="toggle-pw" onclick="togglePw('confirm', this)">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                    </div>
+                    <span class="field-error" id="err-confirm">Passwords do not match.</span>
+                </div>
+
+                <!-- Terms -->
+                <label class="check-label" id="terms-label">
+                    <input type="checkbox" id="terms">
+                    <span class="custom-check"></span>
+                    I agree to STACKLY's <a href="404.html">Terms of Service</a> and <a href="404.html">Privacy Policy</a>. I consent to receive reservation confirmations and member offers.
+                </label>
+                <div style="display: none; font-size: 0.74rem; color: #e05252; margin-top: -18px; margin-bottom: 18px;" id="err-terms">
+                    Please accept the terms to continue.
+                </div>
+
+                <button type="submit" class="auth-btn"><span>Create My Account</span></button>
+            </form>
+
+            <div class="auth-divider"><span>or sign up with</span></div>
+
+            <div class="social-auth">
+                <a href="404.html" class="social-btn">
+                    <i class="fa-brands fa-google"></i> Google
+                </a>
+                <a href="404.html" class="social-btn">
+                    <i class="fa-brands fa-facebook-f"></i> Facebook
+                </a>
+            </div>
+        </div>
+
+        <!-- Right Visual Panel -->
+        <div class="auth-visual">
+            <img src="images/image_1.webp" alt="STACKLY Fine Dining" id="visual-img">
+            <div class="visual-arch"></div>
+            <div class="visual-arch-2"></div>
+            <div class="auth-visual-content">
+                <a href="index.html" style="font-family: var(--font-heading); font-size: 2rem; color: var(--text-white); text-decoration: none; font-weight: 600; text-align: right; display: block;">STACKLY</a>
+
+                <div>
+                    <ul class="perks-list">
+                        <li><i class="fa fa-check"></i> Priority table reservations — skip the queue</li>
+                        <li><i class="fa fa-check"></i> Exclusive member-only menu previews</li>
+                        <li><i class="fa fa-check"></i> Early access to Chef's Table bookings</li>
+                        <li><i class="fa fa-check"></i> Birthday & anniversary dining privileges</li>
+                        <li><i class="fa fa-check"></i> STACKLY Journal — weekly culinary newsletter</li>
+                    </ul>
+                    <div class="auth-visual-quote">
+                        <blockquote>"Good food is the foundation of genuine happiness."</blockquote>
+                        <cite>— Auguste Escoffier</cite>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Visual zoom
+        window.addEventListener('load', () => {
+            const img = document.getElementById('visual-img');
+            if (img) { img.style.transform = 'scale(1)'; img.style.transition = 'transform 12s ease'; }
+        });
+
+        // Password toggle
+        function togglePw(fieldId, btn) {
+            const field = document.getElementById(fieldId);
+            const icon = btn.querySelector('i');
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // Password strength meter
+        document.getElementById('password').addEventListener('input', function() {
+            const val = this.value;
+            const strengthUI = document.getElementById('pwStrength');
+            const bar1 = document.getElementById('bar1');
+            const bar2 = document.getElementById('bar2');
+            const bar3 = document.getElementById('bar3');
+            const label = document.getElementById('pwLabel');
+
+            if (!val) { strengthUI.style.display = 'none'; return; }
+            strengthUI.style.display = 'flex';
+
+            bar1.className = 'pw-bar';
+            bar2.className = 'pw-bar';
+            bar3.className = 'pw-bar';
+
+            let score = 0;
+            if (val.length >= 8) score++;
+            if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score++;
+            if (/[^A-Za-z0-9]/.test(val)) score++;
+
+            if (score === 1) {
+                bar1.classList.add('weak');
+                label.textContent = 'Weak';
+                label.style.color = '#e05252';
+            } else if (score === 2) {
+                bar1.classList.add('medium');
+                bar2.classList.add('medium');
+                label.textContent = 'Fair';
+                label.style.color = '#e8a838';
+            } else if (score === 3) {
+                bar1.classList.add('strong');
+                bar2.classList.add('strong');
+                bar3.classList.add('strong');
+                label.textContent = 'Strong';
+                label.style.color = '#5ab585';
+            }
+        });
+
+        // Form validation
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let valid = true;
+
+            const fields = {
+                fname:    { el: document.getElementById('fname'),    grp: document.getElementById('group-fname'),    check: v => v.trim().length > 0 },
+                lname:    { el: document.getElementById('lname'),    grp: document.getElementById('group-lname'),    check: v => v.trim().length > 0 },
+                email:    { el: document.getElementById('email'),    grp: document.getElementById('group-email'),    check: v => /\S+@\S+\.\S+/.test(v) },
+                phone:    { el: document.getElementById('phone'),    grp: document.getElementById('group-phone'),    check: v => v.trim().length >= 10 },
+                password: { el: document.getElementById('password'), grp: document.getElementById('group-password'), check: v => v.length >= 8 },
+            };
+
+            // Reset
+            Object.values(fields).forEach(f => f.grp.classList.remove('has-error'));
+            document.getElementById('group-confirm').classList.remove('has-error');
+            document.getElementById('err-terms').style.display = 'none';
+
+            // Validate each
+            Object.values(fields).forEach(f => {
+                if (!f.check(f.el.value)) {
+                    f.grp.classList.add('has-error');
+                    valid = false;
+                }
+            });
+
+            // Confirm password
+            const pw = document.getElementById('password').value;
+            const conf = document.getElementById('confirm').value;
+            if (conf !== pw || !conf) {
+                document.getElementById('group-confirm').classList.add('has-error');
+                valid = false;
+            }
+
+            // Terms
+            if (!document.getElementById('terms').checked) {
+                document.getElementById('err-terms').style.display = 'block';
+                valid = false;
+            }
+
+            if (valid) {
+                const btn = this.querySelector('.auth-btn span');
+                btn.textContent = '✓ Creating Account...';
+                setTimeout(() => { window.location.href = 'index.html'; }, 1400);
+            }
+        });
+
+        // Clear errors on input
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('input', () => {
+                input.closest('.form-group').classList.remove('has-error');
+                if (input.id === 'terms') document.getElementById('err-terms').style.display = 'none';
+            });
+        });
+
+        document.getElementById('terms').addEventListener('change', () => {
+            document.getElementById('err-terms').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

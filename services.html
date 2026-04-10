@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services | STACKLY — Fine Dining Salem</title>
+    <meta name="description" content="Explore STACKLY's premium services — private dining, chef's table, event catering, mixology masterclasses, and more in Salem, Tamilnadu.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ── Page Hero ── */
+        .page-hero {
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding-bottom: 100px;
+            padding-top: 140px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+
+        .page-hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.2;
+        }
+
+        .page-hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, var(--bg-deep) 30%, transparent 100%);
+        }
+
+        .page-hero .container { position: relative; z-index: 2; }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            font-size: 0.78rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color 0.3s; }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: var(--primary); }
+
+        .page-hero-title {
+            font-family: var(--font-heading);
+            font-size: clamp(3.5rem, 9vw, 7.5rem);
+            line-height: 1.0;
+            margin-bottom: 25px;
+        }
+
+        .page-hero-sub {
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--text-muted);
+            max-width: 560px;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Decorative Number ── */
+        .service-number {
+            font-family: var(--font-heading);
+            font-size: 8rem;
+            font-weight: 700;
+            color: rgba(197, 160, 89, 0.08);
+            line-height: 1;
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* ── Services Intro Strip ── */
+        .intro-strip {
+            padding: 60px 0;
+            border-top: 1px solid rgba(197, 160, 89, 0.12);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.12);
+        }
+
+        .intro-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+        }
+
+        .intro-stat {
+            padding: 40px;
+            border-right: 1px solid rgba(197, 160, 89, 0.12);
+            text-align: center;
+        }
+
+        .intro-stat:last-child { border-right: none; }
+
+        .intro-stat .num {
+            font-family: var(--font-heading);
+            font-size: 3.5rem;
+            color: var(--primary);
+            display: block;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .intro-stat p {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        /* ── Service Blocks ── */
+        .service-block {
+            padding: 120px 0;
+            position: relative;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.08);
+        }
+
+        .service-block:nth-child(even) .service-inner {
+            flex-direction: row-reverse;
+        }
+
+        .service-inner {
+            display: flex;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .service-visual {
+            flex: 1;
+            position: relative;
+            min-width: 0;
+        }
+
+        .service-arch {
+            width: 100%;
+            height: 560px;
+            border-radius: 500px 500px 0 0;
+            overflow: hidden;
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            position: relative;
+        }
+
+        .service-arch img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s var(--transition);
+        }
+
+        .service-arch:hover img { transform: scale(1.07); }
+
+        .service-tag {
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            width: 130px;
+            height: 130px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--bg-deep);
+            font-weight: 700;
+            text-align: center;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            z-index: 5;
+        }
+
+        .service-tag i { font-size: 1.8rem; margin-bottom: 6px; }
+
+        .service-content {
+            flex: 1;
+            position: relative;
+        }
+
+        .service-cat {
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 0.72rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .service-cat::before {
+            content: '';
+            display: block;
+            width: 30px;
+            height: 1px;
+            background: var(--primary);
+        }
+
+        .service-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2.5rem, 4.5vw, 3.8rem);
+            line-height: 1.1;
+            margin-bottom: 25px;
+        }
+
+        .service-desc {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            line-height: 1.9;
+            margin-bottom: 40px;
+        }
+
+        .service-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 45px;
+        }
+
+        .service-features li {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .service-features li i {
+            color: var(--primary);
+            font-size: 0.8rem;
+            width: 20px;
+        }
+
+        .service-price {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 6px;
+            padding: 18px 30px;
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            border-radius: 100px;
+            margin-bottom: 40px;
+        }
+
+        .service-price .from {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .service-price .amount {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .service-price .per {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* ── Full-Width CTA Cards ── */
+        .experience-cards {
+            padding: 120px 0;
+        }
+
+        .xp-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            background: rgba(197, 160, 89, 0.1);
+            border: 1px solid rgba(197, 160, 89, 0.1);
+        }
+
+        .xp-card {
+            background: var(--bg-deep);
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: background 0.5s var(--transition);
+        }
+
+        .xp-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s var(--transition);
+            z-index: 0;
+        }
+
+        .xp-card:hover::before { transform: scaleX(1); }
+
+        .xp-card:hover .xp-icon,
+        .xp-card:hover .xp-title,
+        .xp-card:hover .xp-desc,
+        .xp-card:hover .xp-arrow { color: var(--bg-deep); }
+
+        .xp-card > * { position: relative; z-index: 1; }
+
+        .xp-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 25px;
+            transition: color 0.5s;
+        }
+
+        .xp-title {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            margin-bottom: 15px;
+            transition: color 0.5s;
+        }
+
+        .xp-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 30px;
+            transition: color 0.5s;
+        }
+
+        .xp-arrow {
+            color: var(--primary);
+            font-size: 1.2rem;
+            transition: color 0.5s, transform 0.3s;
+            display: inline-block;
+        }
+
+        .xp-card:hover .xp-arrow { transform: translateX(8px); }
+
+        /* ── Add-ons Section ── */
+        .addons-section {
+            padding: 120px 0;
+            background: var(--bg-offset);
+        }
+
+        .addons-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 70px;
+        }
+
+        .addon-card {
+            padding: 40px 30px;
+            border: 1px solid rgba(197, 160, 89, 0.15);
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.5s var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .addon-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0%;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.5s var(--transition);
+        }
+
+        .addon-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-8px);
+        }
+
+        .addon-card:hover::after { width: 100%; }
+
+        .addon-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(197, 160, 89, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 1.6rem;
+            color: var(--primary);
+            border: 1px solid rgba(197, 160, 89, 0.2);
+        }
+
+        .addon-card h4 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .addon-card p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* ── Process Section ── */
+        .process-section {
+            padding: 120px 0;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            margin-top: 80px;
+            position: relative;
+        }
+
+        .process-steps::before {
+            content: '';
+            position: absolute;
+            top: 35px;
+            left: 12.5%;
+            right: 12.5%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--primary), transparent);
+            z-index: 0;
+        }
+
+        .process-step {
+            text-align: center;
+            padding: 0 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-dot {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 1px solid rgba(197, 160, 89, 0.4);
+            background: var(--bg-deep);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            color: var(--primary);
+            transition: all 0.4s;
+        }
+
+        .process-step:hover .step-dot {
+            background: var(--primary);
+            color: var(--bg-deep);
+        }
+
+        .process-step h4 {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+        }
+
+        .process-step p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* ── Testimonial Band ── */
+        .testi-band {
+            padding: 100px 0;
+            background: var(--bg-offset);
+            overflow: hidden;
+        }
+
+        .testi-quote {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            line-height: 1.3;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+            font-style: italic;
+            position: relative;
+        }
+
+        .testi-quote::before {
+            content: '\201C';
+            font-size: 8rem;
+            color: var(--primary);
+            opacity: 0.2;
+            position: absolute;
+            top: -40px;
+            left: -20px;
+            font-family: var(--font-heading);
+            line-height: 1;
+        }
+
+        .testi-author {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--primary);
+        }
+
+        /* ── Final CTA ── */
+        .final-cta {
+            padding: 160px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta-bg {
+            position: absolute;
+            inset: 0;
+        }
+
+        .final-cta-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.1;
+        }
+
+        .final-cta-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, transparent 30%, var(--bg-deep) 80%);
+        }
+
+        .final-cta .container { position: relative; z-index: 2; }
+
+        .final-cta-title {
+            font-family: var(--font-heading);
+            font-size: clamp(3rem, 7vw, 6rem);
+            margin-bottom: 25px;
+            line-height: 1.1;
+        }
+
+        .final-cta-sub {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 50px;
+            max-width: 550px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .intro-stats { grid-template-columns: repeat(2, 1fr); }
+            .service-inner { flex-direction: column !important; gap: 50px; }
+            .service-arch { height: 400px; }
+            .xp-grid { grid-template-columns: 1fr; }
+            .addons-grid { grid-template-columns: 1fr 1fr; }
+            .process-steps { grid-template-columns: 1fr 1fr; gap: 50px; }
+            .process-steps::before { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .page-hero { padding-top: 120px; padding-bottom: 60px; }
+            .intro-stats { grid-template-columns: 1fr 1fr; }
+            .intro-stat { padding: 25px; }
+            .service-arch { height: 300px; border-radius: 300px 300px 0 0; }
+            .service-tag { width: 100px; height: 100px; }
+            .addons-grid { grid-template-columns: 1fr; }
+            .process-steps { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-content text-center">
+            <h1 class="logo" style="color: var(--primary);">STACKLY</h1>
+            <div style="width: 220px; height: 1px; background: rgba(255,255,255,0.08); margin: 20px auto; overflow: hidden;">
+                <div class="loader-bar"></div>
+            </div>
+            <p style="text-transform: uppercase; letter-spacing: 5px; font-size: 0.75rem; color: var(--text-muted);">Curating your experience</p>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="logo">STACKLY</a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="services.html" class="nav-link" style="color: var(--primary);">Services</a>
+                <a href="menu.html" class="nav-link">Menu</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="blogs.html" class="nav-link">Blogs</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+            <div class="nav-cta" style="display:block;">
+                <a href="login.html" class="btn btn-primary" style="padding: 10px 22px; font-size: 0.78rem;">Login</a>
+            </div>
+            <button class="mobile-toggle">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- Page Hero -->
+        <section class="page-hero">
+            <div class="page-hero-bg">
+                <img src="images/image_1.webp" alt="STACKLY Ambiance">
+            </div>
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="index.html">Home</a>
+                    <i class="fa fa-angle-right" style="font-size: 0.65rem;"></i>
+                    <span>Services</span>
+                </div>
+                <h1 class="page-hero-title anim-title">
+                    Our <span class="text-gold">Services</span>
+                </h1>
+                <p class="page-hero-sub">Beyond a meal — an architecture of sensation. Discover every way STACKLY transforms an occasion into memory.</p>
+            </div>
+        </section>
+
+        <!-- Stats Strip -->
+        <div class="intro-strip">
+            <div class="container">
+                <div class="intro-stats">
+                    <div class="intro-stat stat">
+                        <span class="num">12+</span>
+                        <p>Signature Services</p>
+                    </div>
+                    <div class="intro-stat stat">
+                        <span class="num">500+</span>
+                        <p>Events Hosted</p>
+                    </div>
+                    <div class="intro-stat stat">
+                        <span class="num">6</span>
+                        <p>Private Dining Rooms</p>
+                    </div>
+                    <div class="intro-stat stat">
+                        <span class="num">98%</span>
+                        <p>Guest Satisfaction</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ Service 1: Private Dining ═══ -->
+        <section class="service-block">
+            <div class="container">
+                <div class="service-inner">
+                    <div class="service-visual">
+                        <div class="service-number">01</div>
+                        <div class="service-arch">
+                            <img src="images/image_5.webp" alt="Private Dining">
+                        </div>
+                        <div class="service-tag">
+                            <i class="fa fa-utensils"></i>
+                            Private<br>Dining
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <p class="service-cat">Service — 01</p>
+                        <h2 class="service-title">Private Dining<br><em style="color: var(--primary);">Rooms</em></h2>
+                        <p class="service-desc">Curated exclusivity for your most intimate gatherings. Our six private dining rooms range from candlelit alcoves for two to grand parlours for forty, each styled with bespoke décor, dedicated service staff, and a personalised menu conceived just for your evening.</p>
+                        <ul class="service-features">
+                            <li><i class="fa fa-check-circle"></i> Six uniquely themed dining rooms (2–40 guests)</li>
+                            <li><i class="fa fa-check-circle"></i> Custom menus crafted with your preferences</li>
+                            <li><i class="fa fa-check-circle"></i> Dedicated sommelier & service team</li>
+                            <li><i class="fa fa-check-circle"></i> AV setup, florals & ambient lighting on request</li>
+                            <li><i class="fa fa-check-circle"></i> Available for business dinners, proposals & celebrations</li>
+                        </ul>
+                        <div class="service-price">
+                            <span class="from">From</span>
+                            <span class="amount">₹8,500</span>
+                            <span class="per">/ person</span>
+                        </div>
+                        <a href="index.html#contact" class="btn btn-primary">Reserve a Room</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ Service 2: Chef's Table ═══ -->
+        <section class="service-block">
+            <div class="container">
+                <div class="service-inner">
+                    <div class="service-visual">
+                        <div class="service-number">02</div>
+                        <div class="service-arch">
+                            <img src="images/image_6.webp" alt="Chef's Table">
+                        </div>
+                        <div class="service-tag">
+                            <i class="fa fa-hat-chef"></i>
+                            Chef's<br>Table
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <p class="service-cat">Service — 02</p>
+                        <h2 class="service-title">The Chef's<br><em style="color: var(--primary);">Table</em></h2>
+                        <p class="service-desc">Sit at the heart of creation. STACKLY's Chef's Table places you centre-stage in our open kitchen, where you'll witness — and taste — a 9-course theatrical tasting menu built around the freshest seasonal produce, narrated personally by our Executive Chef.</p>
+                        <ul class="service-features">
+                            <li><i class="fa fa-check-circle"></i> 9-course seasonal tasting menu</li>
+                            <li><i class="fa fa-check-circle"></i> Open kitchen front-row seating (max 8 guests)</li>
+                            <li><i class="fa fa-check-circle"></i> Wine pairing available (6 curated pours)</li>
+                            <li><i class="fa fa-check-circle"></i> Live narration by Executive Chef</li>
+                            <li><i class="fa fa-check-circle"></i> Personalised keepsake menu card</li>
+                        </ul>
+                        <div class="service-price">
+                            <span class="from">From</span>
+                            <span class="amount">₹14,000</span>
+                            <span class="per">/ person (incl. pairings)</span>
+                        </div>
+                        <a href="index.html#contact" class="btn btn-primary">Book Chef's Table</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ Service 3: Event Catering ═══ -->
+        <section class="service-block">
+            <div class="container">
+                <div class="service-inner">
+                    <div class="service-visual">
+                        <div class="service-number">03</div>
+                        <div class="service-arch">
+                            <img src="images/image_7.webp" alt="Event Catering">
+                        </div>
+                        <div class="service-tag">
+                            <i class="fa fa-star"></i>
+                            Event<br>Catering
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <p class="service-cat">Service — 03</p>
+                        <h2 class="service-title">Premium Event<br><em style="color: var(--primary);">Catering</em></h2>
+                        <p class="service-desc">Bring STACKLY's culinary excellence to your venue. Our off-site catering team manages everything from menu engineering to live cooking stations, décor-aligned plating, and full service staff — flawlessly orchestrated for weddings, corporate galas, and milestone celebrations.</p>
+                        <ul class="service-features">
+                            <li><i class="fa fa-check-circle"></i> On-site & off-site catering across Salem & beyond</li>
+                            <li><i class="fa fa-check-circle"></i> Live kitchen stations (BBQ, Pasta, Dessert & more)</li>
+                            <li><i class="fa fa-check-circle"></i> Minimum 50 guests, scalable to 1,000+</li>
+                            <li><i class="fa fa-check-circle"></i> Halal-certified & dietary-inclusive menus</li>
+                            <li><i class="fa fa-check-circle"></i> Full rentals: linens, crockery, glassware</li>
+                        </ul>
+                        <div class="service-price">
+                            <span class="from">From</span>
+                            <span class="amount">₹3,200</span>
+                            <span class="per">/ head (50-guest minimum)</span>
+                        </div>
+                        <a href="index.html#contact" class="btn btn-primary">Get a Quote</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══ Service 4: Mixology Masterclass ═══ -->
+        <section class="service-block">
+            <div class="container">
+                <div class="service-inner">
+                    <div class="service-visual">
+                        <div class="service-number">04</div>
+                        <div class="service-arch">
+                            <img src="images/image_16.webp" alt="Mixology Masterclass">
+                        </div>
+                        <div class="service-tag">
+                            <i class="fa fa-wine-glass"></i>
+                            Mixology<br>Class
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <p class="service-cat">Service — 04</p>
+                        <h2 class="service-title">Mixology<br><em style="color: var(--primary);">Masterclass</em></h2>
+                        <p class="service-desc">A hands-on journey into the art of craft cocktails with STACKLY's master mixologists. Learn the science of flavour balance, infusion techniques, and the history behind your favourite pours — then shake, stir, and savour three original cocktails you'll create yourself.</p>
+                        <ul class="service-features">
+                            <li><i class="fa fa-check-circle"></i> 2.5-hour guided mixology experience</li>
+                            <li><i class="fa fa-check-circle"></i> Groups of 4–20 guests</li>
+                            <li><i class="fa fa-check-circle"></i> All tools, spirits & garnishes provided</li>
+                            <li><i class="fa fa-check-circle"></i> Recipe booklet & branded cocktail kit to take home</li>
+                            <li><i class="fa fa-check-circle"></i> Available as a team-building or hen-party experience</li>
+                        </ul>
+                        <div class="service-price">
+                            <span class="from">From</span>
+                            <span class="amount">₹4,500</span>
+                            <span class="per">/ person</span>
+                        </div>
+                        <a href="index.html#contact" class="btn btn-primary">Book Masterclass</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marquee -->
+        <div class="marquee-section text-gold" style="margin: 0;">
+            <div class="marquee-content">
+                <span>PRIVATE DINING</span> ✦ <span>CHEF'S TABLE</span> ✦ <span>LIVE CATERING</span> ✦ <span>MIXOLOGY CLASSES</span> ✦ <span>WINE PAIRINGS</span> ✦ <span>CORPORATE EVENTS</span> ✦ <span>BRIDAL CELEBRATIONS</span> ✦ <span>PRIVATE DINING</span> ✦ <span>CHEF'S TABLE</span> ✦ <span>LIVE CATERING</span> ✦ <span>MIXOLOGY CLASSES</span> ✦
+            </div>
+        </div>
+
+        <!-- Experience Cards -->
+        <section class="experience-cards">
+            <div class="container">
+                <div class="text-center" style="margin-bottom: 70px;">
+                    <span class="card-cat">✦ Also Available ✦</span>
+                    <h2 style="font-family: var(--font-heading); font-size: clamp(2.5rem, 5vw, 4.5rem); margin-top: 15px;">More Experiences</h2>
+                </div>
+                <div class="xp-grid">
+                    <div class="xp-card">
+                        <div class="xp-icon"><i class="fa fa-champagne-glasses"></i></div>
+                        <h3 class="xp-title">Wine & Dine Evenings</h3>
+                        <p class="xp-desc">Curated wine-paired suppers every Friday and Saturday — five courses, five pours, and a STACKLY sommelier guiding your palate through origin, terroir, and taste.</p>
+                        <span class="xp-arrow"><i class="fa fa-arrow-right"></i></span>
+                    </div>
+                    <div class="xp-card">
+                        <div class="xp-icon"><i class="fa fa-birthday-cake"></i></div>
+                        <h3 class="xp-title">Celebration Packages</h3>
+                        <p class="xp-desc">Birthdays, anniversaries, proposals — let us handle every detail. Choose from our Gold, Platinum, or Royal packages with floral setups, cakes, and surprises.</p>
+                        <span class="xp-arrow"><i class="fa fa-arrow-right"></i></span>
+                    </div>
+                    <div class="xp-card">
+                        <div class="xp-icon"><i class="fa fa-briefcase"></i></div>
+                        <h3 class="xp-title">Corporate Dining</h3>
+                        <p class="xp-desc">Business lunches, client dinners, and team offsites — STACKLY offers dedicated corporate hospitality menus, NDAs respected, and exclusive floor hire on request.</p>
+                        <span class="xp-arrow"><i class="fa fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Add-ons -->
+        <section class="addons-section">
+            <div class="container">
+                <div class="text-center">
+                    <span class="card-cat">✦ Enhancements ✦</span>
+                    <h2 style="font-family: var(--font-heading); font-size: clamp(2.5rem, 5vw, 4.5rem); margin-top: 15px;">Curate Your Night</h2>
+                    <p style="color: var(--text-muted); margin-top: 20px; font-size: 1rem; max-width: 500px; margin-left: auto; margin-right: auto;">Add these premium extras to any service for an even more unforgettable experience.</p>
+                </div>
+                <div class="addons-grid">
+                    <div class="addon-card">
+                        <div class="addon-icon"><i class="fa fa-music"></i></div>
+                        <h4>Live Jazz</h4>
+                        <p>Resident jazz trio or curated live playlist — ambient music tailored to the mood of your evening.</p>
+                    </div>
+                    <div class="addon-card">
+                        <div class="addon-icon"><i class="fa fa-camera"></i></div>
+                        <h4>Dining Photography</h4>
+                        <p>Professional photographer documents your occasion with editorial-quality imagery.</p>
+                    </div>
+                    <div class="addon-card">
+                        <div class="addon-icon"><i class="fa fa-spa"></i></div>
+                        <h4>Floral Styling</h4>
+                        <p>Bespoke table arrangements designed by our in-house floral artist to match your colour palette.</p>
+                    </div>
+                    <div class="addon-card">
+                        <div class="addon-icon"><i class="fa fa-gift"></i></div>
+                        <h4>Gift Hampers</h4>
+                        <p>Curated STACKLY hampers with artisanal condiments, house-blend teas & premium chocolates.</p>
+                    </div>
+                    <div class="addon-card">
+                        <div class="addon-icon"><i class="fa fa-car"></i></div>
+                        <h4>Chauffeur Transfer</h4>
+                        <p>Complimentary luxury car transfers within Salem for parties of 4 or more on premium packages.</p>
+                    </div>
+                    <div class="addon-card">
+                        <div class="addon-icon"><i class="fa fa-palette"></i></div>
+                        <h4>Custom Menu Design</h4>
+                        <p>Printed keepsake menus personalised with your names, date, and a handwritten note from the chef.</p>
+                    </div>
+                    <div class="addon-card">
+                        <div class="addon-icon"><i class="fa fa-cake-candles"></i></div>
+                        <h4>Patisserie Creations</h4>
+                        <p>Bespoke cakes and sculptural desserts by our in-house pastry team for any occasion.</p>
+                    </div>
+                    <div class="addon-card">
+                        <div class="addon-icon"><i class="fa fa-video"></i></div>
+                        <h4>Cinematic Reel</h4>
+                        <p>A short-form cinematic video of your evening — perfect for anniversaries and proposals.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking Process -->
+        <section class="process-section">
+            <div class="container">
+                <div class="text-center">
+                    <span class="card-cat">✦ How It Works ✦</span>
+                    <h2 style="font-family: var(--font-heading); font-size: clamp(2.5rem, 5vw, 4.5rem); margin-top: 15px;">Effortless Booking</h2>
+                    <p style="color: var(--text-muted); margin-top: 20px; font-size: 1rem; max-width: 500px; margin-left: auto; margin-right: auto;">From enquiry to evening — we handle every detail so you simply arrive and enjoy.</p>
+                </div>
+                <div class="process-steps">
+                    <div class="process-step">
+                        <div class="step-dot">01</div>
+                        <h4>Enquire</h4>
+                        <p>Drop us a message or call — tell us your occasion, guest count, and preferred dates.</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-dot">02</div>
+                        <h4>Consult</h4>
+                        <p>A dedicated host contacts you within 24 hours to understand your vision and craft a proposal.</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-dot">03</div>
+                        <h4>Confirm</h4>
+                        <p>Review your personalised quote, choose your add-ons, and secure the booking with a deposit.</p>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-dot">04</div>
+                        <h4>Arrive & Enjoy</h4>
+                        <p>We handle everything else — just show up and let STACKLY create a memory worth keeping.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonial Band -->
+        <section class="testi-band">
+            <div class="container">
+                <div class="testi-quote">
+                    "We booked the private dining room for our anniversary — from the custom menu to the florals, every single detail was beyond what we imagined. STACKLY didn't just host us, they made us feel like the only people in the world."
+                </div>
+                <p class="testi-author">— Priya & Karthik, Salem &nbsp; ✦ &nbsp; Private Dining Experience</p>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="final-cta">
+            <div class="final-cta-bg">
+                <img src="images/image_1.webp" alt="STACKLY">
+            </div>
+            <div class="container">
+                <span class="card-cat" style="justify-content: center;">✦ Begin Your Experience ✦</span>
+                <h2 class="final-cta-title" style="margin-top: 20px;">
+                    Ready to<br><span class="text-gold">Reserve?</span>
+                </h2>
+                <p class="final-cta-sub">Whether it's a quiet dinner for two or a grand celebration for hundreds — STACKLY is ready to craft your perfect evening.</p>
+                <div class="cta-buttons">
+                    <a href="index.html#contact" class="btn btn-primary">Book Now</a>
+                    <a href="tel:+919876543210" class="btn btn-outline"><i class="fa fa-phone" style="margin-right: 10px;"></i>Call Us</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer text-center" style="padding: 100px 0 50px; background: rgba(14, 36, 31, 1); border-top: 1px solid var(--glass);">
+        <div class="container">
+            <h2 class="logo" style="font-size: 3rem; margin-bottom: 20px;">STACKLY</h2>
+            <p style="opacity: 0.5; margin-bottom: 40px; font-style: italic;">"Modern Gastronomy. Classic Soul."</p>
+            <div class="footer-links" style="display: flex; justify-content: center; gap: 30px; margin-bottom: 40px; flex-wrap: wrap;">
+                <a href="index.html#about" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">About Us</a>
+                <a href="index.html#menu" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">Menu</a>
+                <a href="services.html" style="color: var(--primary); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">Services</a>
+                <a href="index.html#chef" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">Blogs</a>
+                <a href="index.html#contact" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">Contact</a>
+            </div>
+            <div class="social-icons" style="flex-direction: row; justify-content: center; margin-bottom: 40px; display: flex; gap: 20px;">
+                <a href="404.html" style="color: var(--text-white);"><i class="fa-brands fa-instagram"></i></a>
+                <a href="404.html" style="color: var(--text-white);"><i class="fa-brands fa-facebook"></i></a>
+                <a href="404.html" style="color: var(--text-white);"><i class="fa-brands fa-twitter"></i></a>
+                <a href="404.html" style="color: var(--text-white);"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+            <p style="font-size: 0.8rem; opacity: 0.4;">&copy; 2026 STACKLY Restaurant. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Override anchor smooth scroll — links on this page go to index.html, not in-page
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.removeEventListener('click', () => {});
+        });
+    </script>
+</body>
+</html>

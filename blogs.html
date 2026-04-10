@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blogs | STACKLY</title>
+    <meta name="description" content="Stories, recipes, and culinary insights from the STACKLY kitchen — Salem's finest fine dining restaurant.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+
+        /* ── Page Hero ── */
+        .page-hero {
+            min-height: 75vh;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding-bottom: 100px;
+        }
+        .page-hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        .page-hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.08);
+            transition: transform 10s ease;
+        }
+        .page-hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to top,
+                var(--bg-deep) 0%,
+                rgba(11,28,24,0.6) 55%,
+                rgba(11,28,24,0.2) 100%
+            );
+        }
+        .page-hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        /* ── Breadcrumb ── */
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+        .breadcrumb a { color: var(--primary); text-decoration: none; }
+        .breadcrumb span { opacity: 0.5; }
+
+        /* ── Category Filter Tabs ── */
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 60px 0 80px;
+        }
+        .filter-btn {
+            background: transparent;
+            border: 1px solid rgba(197,160,89,0.25);
+            color: var(--text-muted);
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 10px 24px;
+            cursor: pointer;
+            transition: all 0.35s var(--transition);
+        }
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--bg-deep);
+        }
+
+        /* ── Featured Post ── */
+        .featured-post {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 0;
+            border: 1px solid rgba(197,160,89,0.18);
+            margin-bottom: 4px;
+            overflow: hidden;
+            transition: border-color 0.4s;
+        }
+        .featured-post:hover { border-color: var(--primary); }
+        .featured-img {
+            position: relative;
+            overflow: hidden;
+            height: 560px;
+        }
+        .featured-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .featured-post:hover .featured-img img { transform: scale(1.06); }
+        .featured-badge {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: var(--primary);
+            color: var(--bg-deep);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 7px 16px;
+            z-index: 2;
+        }
+        .featured-body {
+            padding: 60px 55px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: var(--bg-offset);
+        }
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+        .post-meta .dot-sep { color: var(--primary); }
+        .post-cat-tag {
+            color: var(--primary);
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .featured-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 3.5vw, 3rem);
+            line-height: 1.2;
+            margin-bottom: 20px;
+            transition: color 0.3s;
+        }
+        .featured-post:hover .featured-title { color: var(--primary); }
+        .featured-excerpt {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.85;
+            margin-bottom: 35px;
+        }
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--primary);
+            text-decoration: none;
+            transition: gap 0.3s var(--transition);
+        }
+        .read-more:hover { gap: 20px; }
+        .read-more .arrow {
+            width: 36px;
+            height: 1px;
+            background: var(--primary);
+            position: relative;
+            transition: width 0.3s var(--transition);
+        }
+        .read-more:hover .arrow { width: 50px; }
+        .read-more .arrow::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -4px;
+            width: 8px;
+            height: 8px;
+            border-right: 1px solid var(--primary);
+            border-top: 1px solid var(--primary);
+            transform: rotate(45deg);
+        }
+
+        /* ── Blog Grid ── */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+
+        /* ── Blog Card ── */
+        .blog-card {
+            border: 1px solid rgba(197,160,89,0.15);
+            overflow: hidden;
+            transition: border-color 0.4s, transform 0.5s var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+        .blog-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-8px);
+        }
+        .blog-card-img {
+            width: 100%;
+            height: 260px;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .blog-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .blog-card:hover .blog-card-img img { transform: scale(1.08); }
+        .blog-card-cat {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: var(--primary);
+            color: var(--bg-deep);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 5px 12px;
+        }
+        .blog-card-body {
+            padding: 30px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .blog-card-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 14px;
+            display: flex;
+            gap: 12px;
+        }
+        .blog-card-title {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            line-height: 1.3;
+            margin-bottom: 14px;
+            transition: color 0.3s;
+        }
+        .blog-card:hover .blog-card-title { color: var(--primary); }
+        .blog-card-excerpt {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            flex: 1;
+            margin-bottom: 24px;
+        }
+        .blog-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(197,160,89,0.12);
+            padding-top: 18px;
+        }
+        .author-mini {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .author-mini-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 1px solid var(--primary);
+            flex-shrink: 0;
+        }
+        .author-mini-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .author-mini-name { font-size: 0.78rem; font-weight: 600; color: var(--text-white); }
+        .read-time { font-size: 0.75rem; color: var(--text-muted); }
+
+        /* ── Wide card (spans 2 cols) ── */
+        .blog-card.wide {
+            grid-column: span 2;
+            flex-direction: row;
+        }
+        .blog-card.wide .blog-card-img {
+            width: 45%;
+            height: auto;
+            flex-shrink: 0;
+        }
+        .blog-card.wide .blog-card-body { padding: 40px; }
+        .blog-card.wide .blog-card-title { font-size: 2rem; }
+
+        /* ── Newsletter Strip ── */
+        .newsletter-strip {
+            background: var(--bg-offset);
+            border: 1px solid rgba(197,160,89,0.18);
+            padding: 80px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin: 80px 0;
+        }
+        .newsletter-input-row {
+            display: flex;
+            gap: 0;
+            border: 1px solid rgba(197,160,89,0.35);
+        }
+        .newsletter-input {
+            flex: 1;
+            background: none;
+            border: none;
+            outline: none;
+            padding: 18px 22px;
+            color: var(--text-white);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+        }
+        .newsletter-input::placeholder { color: var(--text-muted); }
+        .newsletter-btn {
+            background: var(--primary);
+            border: none;
+            padding: 18px 30px;
+            color: var(--bg-deep);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-family: var(--font-body);
+            white-space: nowrap;
+        }
+        .newsletter-btn:hover { background: var(--text-white); }
+        .newsletter-note {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 12px;
+        }
+
+        /* ── Trending Sidebar Row ── */
+        .bottom-row {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 30px;
+            margin-bottom: 80px;
+            align-items: start;
+        }
+
+        /* ── Trending / Popular Posts ── */
+        .sidebar-panel {
+            border: 1px solid rgba(197,160,89,0.15);
+            padding: 40px;
+            position: sticky;
+            top: 100px;
+        }
+        .sidebar-heading {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(197,160,89,0.15);
+        }
+        .trending-item {
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+            padding: 18px 0;
+            border-bottom: 1px solid rgba(197,160,89,0.08);
+            cursor: pointer;
+            transition: background 0.3s;
+            text-decoration: none;
+        }
+        .trending-item:last-child { border-bottom: none; }
+        .trending-item:hover .trending-title { color: var(--primary); }
+        .trending-num {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: rgba(197,160,89,0.2);
+            line-height: 1;
+            flex-shrink: 0;
+            width: 36px;
+            transition: color 0.3s;
+        }
+        .trending-item:hover .trending-num { color: rgba(197,160,89,0.5); }
+        .trending-cat {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        .trending-title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            line-height: 1.4;
+            color: var(--text-white);
+            transition: color 0.3s;
+        }
+        .trending-date { font-size: 0.75rem; color: var(--text-muted); margin-top: 5px; }
+
+        /* ── Tags Cloud ── */
+        .tags-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .tag-pill {
+            border: 1px solid rgba(197,160,89,0.25);
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            letter-spacing: 1px;
+            padding: 6px 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+        .tag-pill:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* ── Pagination ── */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin-top: 60px;
+        }
+        .page-btn {
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgba(197,160,89,0.25);
+            background: transparent;
+            color: var(--text-muted);
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .page-btn:hover, .page-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--bg-deep);
+        }
+        .page-btn.arrow-btn { width: 44px; }
+
+        /* ── CTA Band ── */
+        .cta-band {
+            background: var(--primary);
+            padding: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+        }
+        .cta-band h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(2.2rem, 4vw, 3.5rem);
+            color: var(--bg-deep);
+            line-height: 1.15;
+            max-width: 600px;
+        }
+        .btn-dark {
+            background: var(--bg-deep);
+            color: var(--primary);
+            padding: 20px 50px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: all 0.4s var(--transition);
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+        }
+        .btn-dark:hover { background: var(--text-white); color: var(--bg-deep); }
+
+        /* ── Responsive ── */
+        @media (max-width: 1100px) {
+            .bottom-row { grid-template-columns: 1fr; }
+            .sidebar-panel { position: static; }
+            .featured-post { grid-template-columns: 1fr; }
+            .featured-img { height: 400px; }
+        }
+        @media (max-width: 900px) {
+            .blog-grid { grid-template-columns: 1fr 1fr; }
+            .blog-card.wide { grid-column: span 2; flex-direction: column; }
+            .blog-card.wide .blog-card-img { width: 100%; height: 280px; }
+            .newsletter-strip { grid-template-columns: 1fr; gap: 30px; padding: 50px 30px; }
+            .cta-band { flex-direction: column; text-align: center; padding: 60px 30px; }
+        }
+        @media (max-width: 640px) {
+            .blog-grid { grid-template-columns: 1fr; }
+            .blog-card.wide { grid-column: span 1; flex-direction: column; }
+            .blog-card.wide .blog-card-img { width: 100%; height: 240px; }
+            .filter-bar { gap: 6px; }
+            .filter-btn { padding: 8px 16px; font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-content text-center">
+            <h1 class="logo" style="font-size: 4rem; opacity: 0.5;">STACKLY</h1>
+            <div style="width: 200px; height: 1px; background: rgba(255,255,255,0.1); margin: 20px auto; overflow: hidden;">
+                <div class="loader-bar" style="width: 0%; height: 100%; background: var(--primary);"></div>
+            </div>
+            <p style="text-transform: uppercase; letter-spacing: 5px; font-size: 0.8rem;">Opening the journal...</p>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="logo">STACKLY</a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="menu.html" class="nav-link">Menu</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="blog.html" class="nav-link" style="color: var(--primary);">Blogs</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+            <div class="nav-cta">
+                <a href="login.html" class="btn btn-primary" style="padding: 12px 28px;">Login</a>
+            </div>
+            <button class="mobile-toggle">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- Page Hero -->
+        <section class="page-hero">
+            <div class="page-hero-bg">
+                <img src="images/image_10.webp" alt="STACKLY Blog" id="hero-bg-img">
+            </div>
+            <div class="page-hero-content container">
+                <div class="breadcrumb">
+                    <a href="index.html">Home</a>
+                    <span>/</span>
+                    <span>Blogs</span>
+                </div>
+                <span class="card-cat">✦ The STACKLY Journal ✦</span>
+                <h1 class="hero-title anim-title" style="font-size: clamp(3rem, 9vw, 7.5rem);">Our Blog</h1>
+                <p class="hero-subtitle" style="margin-top: 10px; font-size: 1rem;">Stories, recipes & secrets from the kitchen</p>
+            </div>
+        </section>
+
+        <!-- Blog Content -->
+        <section class="section" style="padding-top: 80px;">
+            <div class="container">
+
+                <!-- Category Filter -->
+                <div class="filter-bar" id="filterBar">
+                    <button class="filter-btn active" data-cat="all">All Posts</button>
+                    <button class="filter-btn" data-cat="recipes">Recipes</button>
+                    <button class="filter-btn" data-cat="behind-scenes">Behind the Scenes</button>
+                    <button class="filter-btn" data-cat="ingredients">Ingredients</button>
+                    <button class="filter-btn" data-cat="events">Events</button>
+                    <button class="filter-btn" data-cat="wine">Wine & Cocktails</button>
+                </div>
+
+                <!-- Featured Post -->
+                <div class="featured-post kinetic-header" data-cat="behind-scenes">
+                    <div class="featured-img">
+                        <span class="featured-badge">✦ Featured</span>
+                        <img src="images/image_14.webp" alt="Inside the STACKLY Kitchen">
+                    </div>
+                    <div class="featured-body">
+                        <div class="post-meta">
+                            <span class="post-cat-tag">Behind the Scenes</span>
+                            <span class="dot-sep">✦</span>
+                            <span>April 2, 2026</span>
+                            <span class="dot-sep">✦</span>
+                            <span>8 min read</span>
+                        </div>
+                        <h2 class="featured-title">
+                            Inside the STACKLY Kitchen: A Night in the Life of Chef Lorenzo
+                        </h2>
+                        <p class="featured-excerpt">
+                            The kitchen is theatre. From 4 PM prep to the final dessert plated at midnight, we spent a full service shift alongside our head chef to document the controlled chaos, the precision, and the passion that goes into every plate that leaves our pass.
+                        </p>
+                        <a href="404.html" class="read-more">
+                            Read the Story
+                            <span class="arrow"></span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Main Blog Grid -->
+                <div class="blog-grid" id="blogGrid" style="margin-top: 4px;">
+
+                    <!-- Card 1 — Recipes -->
+                    <div class="blog-card arch-card" style="border-radius: 0;" data-cat="recipes">
+                        <div class="blog-card-img">
+                            <img src="images/image_7.webp" alt="Greek Salad Recipe">
+                            <span class="blog-card-cat">Recipes</span>
+                        </div>
+                        <div class="blog-card-body">
+                            <div class="blog-card-meta">
+                                <span>March 28, 2026</span>
+                                <span>·</span>
+                                <span>5 min read</span>
+                            </div>
+                            <h3 class="blog-card-title">Our Signature Greek Salad: The Recipe We Almost Never Shared</h3>
+                            <p class="blog-card-excerpt">After years of guests begging for it, we're finally revealing the secret behind the most-ordered starter in STACKLY's history — the dressing, the technique, and the one ingredient nobody expects.</p>
+                            <div class="blog-card-footer">
+                                <div class="author-mini">
+                                    <div class="author-mini-avatar"><img src="images/image_11.webp" alt="Chef Lorenzo"></div>
+                                    <div class="author-mini-name">Chef Lorenzo</div>
+                                </div>
+                                <span class="read-time"><i class="fa fa-clock" style="color: var(--primary); margin-right: 5px;"></i> 5 min</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 — Ingredients -->
+                    <div class="blog-card arch-card" style="border-radius: 0;" data-cat="ingredients">
+                        <div class="blog-card-img">
+                            <img src="images/image_2.webp" alt="Tamil Nadu Spices">
+                            <span class="blog-card-cat">Ingredients</span>
+                        </div>
+                        <div class="blog-card-body">
+                            <div class="blog-card-meta">
+                                <span>March 22, 2026</span>
+                                <span>·</span>
+                                <span>6 min read</span>
+                            </div>
+                            <h3 class="blog-card-title">The Tamil Nadu Pantry: 7 Indigenous Ingredients We Swear By</h3>
+                            <p class="blog-card-excerpt">From the fragrant kalpasi (stone flower) to the elusive Kodampuli tamarind, we take you through the seven local ingredients that give STACKLY's cuisine its unmistakable identity.</p>
+                            <div class="blog-card-footer">
+                                <div class="author-mini">
+                                    <div class="author-mini-avatar"><img src="images/image_12.webp" alt="Chef Priya"></div>
+                                    <div class="author-mini-name">Chef Priya</div>
+                                </div>
+                                <span class="read-time"><i class="fa fa-clock" style="color: var(--primary); margin-right: 5px;"></i> 6 min</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 — Wine -->
+                    <div class="blog-card arch-card" style="border-radius: 0;" data-cat="wine">
+                        <div class="blog-card-img">
+                            <img src="images/image_16.webp" alt="Wine Pairing">
+                            <span class="blog-card-cat">Wine & Cocktails</span>
+                        </div>
+                        <div class="blog-card-body">
+                            <div class="blog-card-meta">
+                                <span>March 15, 2026</span>
+                                <span>·</span>
+                                <span>7 min read</span>
+                            </div>
+                            <h3 class="blog-card-title">Pairing Wine with South Indian Food — Our Sommelier's Definitive Guide</h3>
+                            <p class="blog-card-excerpt">The conventional wisdom says South Indian food is too spicy for wine. Our sommelier disagrees — and he has 18 pairings to prove it. A landmark guide for curious palates.</p>
+                            <div class="blog-card-footer">
+                                <div class="author-mini">
+                                    <div class="author-mini-avatar"><img src="images/image_13.webp" alt="Arjun"></div>
+                                    <div class="author-mini-name">Arjun Selvam</div>
+                                </div>
+                                <span class="read-time"><i class="fa fa-clock" style="color: var(--primary); margin-right: 5px;"></i> 7 min</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 — Wide — Events -->
+                    <div class="blog-card wide arch-card" style="border-radius: 0;" data-cat="events">
+                        <div class="blog-card-img">
+                            <img src="images/image_15.webp" alt="Private Gala">
+                            <span class="blog-card-cat">Events</span>
+                        </div>
+                        <div class="blog-card-body">
+                            <div class="blog-card-meta">
+                                <span>March 8, 2026</span>
+                                <span>·</span>
+                                <span>4 min read</span>
+                            </div>
+                            <h3 class="blog-card-title">How We Catered a 200-Guest Corporate Gala in 72 Hours — and Pulled It Off Flawlessly</h3>
+                            <p class="blog-card-excerpt">When a Fortune 500 company called us on a Tuesday asking for a Saturday dinner for 200 guests, our events team said yes. Here's how we planned, prepared, and delivered a night nobody in that room will forget — in under three days.</p>
+                            <div class="blog-card-footer">
+                                <div class="author-mini">
+                                    <div class="author-mini-avatar"><img src="images/image_11.webp" alt="Chef Lorenzo"></div>
+                                    <div class="author-mini-name">Chef Lorenzo</div>
+                                </div>
+                                <span class="read-time"><i class="fa fa-clock" style="color: var(--primary); margin-right: 5px;"></i> 4 min</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 5 — Recipes -->
+                    <div class="blog-card arch-card" style="border-radius: 0;" data-cat="recipes">
+                        <div class="blog-card-img">
+                            <img src="images/image_9.webp" alt="Butternut Pumpkin">
+                            <span class="blog-card-cat">Recipes</span>
+                        </div>
+                        <div class="blog-card-body">
+                            <div class="blog-card-meta">
+                                <span>February 28, 2026</span>
+                                <span>·</span>
+                                <span>6 min read</span>
+                            </div>
+                            <h3 class="blog-card-title">Butternut Pumpkin with Crab — Deconstructing Our Most Complex Appetiser</h3>
+                            <p class="blog-card-excerpt">Three components, fourteen steps, and a process that took us six months to perfect. This deep dive into our Butternut Pumpkin with Crab Salad reveals why the simplest-looking dishes are often the hardest to make.</p>
+                            <div class="blog-card-footer">
+                                <div class="author-mini">
+                                    <div class="author-mini-avatar"><img src="images/image_12.webp" alt="Chef Priya"></div>
+                                    <div class="author-mini-name">Chef Priya</div>
+                                </div>
+                                <span class="read-time"><i class="fa fa-clock" style="color: var(--primary); margin-right: 5px;"></i> 6 min</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 6 — Wine -->
+                    <div class="blog-card arch-card" style="border-radius: 0;" data-cat="wine">
+                        <div class="blog-card-img">
+                            <img src="images/image_3.webp" alt="Cocktails">
+                            <span class="blog-card-cat">Wine & Cocktails</span>
+                        </div>
+                        <div class="blog-card-body">
+                            <div class="blog-card-meta">
+                                <span>February 19, 2026</span>
+                                <span>·</span>
+                                <span>5 min read</span>
+                            </div>
+                            <h3 class="blog-card-title">Making the Velvet Midnight: Our Best-Selling Cocktail, Step by Step</h3>
+                            <p class="blog-card-excerpt">Blackberry, gin, smoked rosemary, and a squeeze of lemon. Sounds simple. But behind STACKLY's signature cocktail lies three years of refinement and one unexpected secret — the smoke technique that changed everything.</p>
+                            <div class="blog-card-footer">
+                                <div class="author-mini">
+                                    <div class="author-mini-avatar"><img src="images/image_13.webp" alt="Arjun"></div>
+                                    <div class="author-mini-name">Arjun Selvam</div>
+                                </div>
+                                <span class="read-time"><i class="fa fa-clock" style="color: var(--primary); margin-right: 5px;"></i> 5 min</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- End Blog Grid -->
+
+                <!-- Newsletter Strip -->
+                <div class="newsletter-strip">
+                    <div>
+                        <span class="card-cat" style="display: block; margin-bottom: 15px;">✦ Stay in the Loop ✦</span>
+                        <h2 class="hero-title" style="text-align: left; font-size: clamp(2rem, 3.5vw, 3rem); margin-bottom: 15px;">
+                            The Kitchen<br>
+                            <em style="color: var(--primary);">Comes to You</em>
+                        </h2>
+                        <p style="opacity: 0.6; font-size: 0.95rem; line-height: 1.8;">
+                            Subscribe to the STACKLY Journal for weekly recipes, behind-the-scenes stories, event announcements, and exclusive early access to new menu launches.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="newsletter-input-row">
+                            <input class="newsletter-input" type="email" placeholder="Your email address">
+                            <button class="newsletter-btn">Subscribe</button>
+                        </div>
+                        <p class="newsletter-note">No spam. Unsubscribe any time. We respect your inbox.</p>
+                        <div style="display: flex; gap: 25px; margin-top: 25px;">
+                            <div>
+                                <div style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary); line-height: 1;">3.2K</div>
+                                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted);">Subscribers</div>
+                            </div>
+                            <div style="width: 1px; background: rgba(197,160,89,0.2);"></div>
+                            <div>
+                                <div style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary); line-height: 1;">Weekly</div>
+                                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted);">Editions</div>
+                            </div>
+                            <div style="width: 1px; background: rgba(197,160,89,0.2);"></div>
+                            <div>
+                                <div style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary); line-height: 1;">Free</div>
+                                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted);">Always</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Row: More Posts + Sidebar -->
+                <div class="bottom-row">
+
+                    <!-- More Posts (left column) -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(197,160,89,0.15);">
+                            <h3 style="font-family: var(--font-heading); font-size: 2rem;">More Stories</h3>
+                            <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px;">Latest First</span>
+                        </div>
+
+                        <!-- List Posts -->
+                        <div style="display: flex; flex-direction: column; gap: 0;" id="morePosts">
+
+                            <!-- Post Item -->
+                            <a href="404.html" style="display: grid; grid-template-columns: 140px 1fr; gap: 25px; padding: 25px 0; border-bottom: 1px solid rgba(197,160,89,0.1); text-decoration: none; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'" data-cat="ingredients">
+                                <div style="border-radius: 8px; overflow: hidden; height: 100px;">
+                                    <img src="images/image_4.webp" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary); margin-bottom: 7px;">Ingredients</div>
+                                    <h4 style="font-family: var(--font-heading); font-size: 1.3rem; color: var(--text-white); line-height: 1.3; margin-bottom: 8px;">Wagyu in Tamil Nadu: Where We Source the World's Most Prized Beef</h4>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">Feb 12, 2026 · 5 min read</span>
+                                </div>
+                            </a>
+
+                            <a href="404.html" style="display: grid; grid-template-columns: 140px 1fr; gap: 25px; padding: 25px 0; border-bottom: 1px solid rgba(197,160,89,0.1); text-decoration: none; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'" data-cat="behind-scenes">
+                                <div style="border-radius: 8px; overflow: hidden; height: 100px;">
+                                    <img src="images/image_5.webp" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary); margin-bottom: 7px;">Behind the Scenes</div>
+                                    <h4 style="font-family: var(--font-heading); font-size: 1.3rem; color: var(--text-white); line-height: 1.3; margin-bottom: 8px;">How STACKLY Designs a New Seasonal Menu From Scratch</h4>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">Feb 4, 2026 · 9 min read</span>
+                                </div>
+                            </a>
+
+                            <a href="404.html" style="display: grid; grid-template-columns: 140px 1fr; gap: 25px; padding: 25px 0; border-bottom: 1px solid rgba(197,160,89,0.1); text-decoration: none; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'" data-cat="events">
+                                <div style="border-radius: 8px; overflow: hidden; height: 100px;">
+                                    <img src="images/image_6.webp" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary); margin-bottom: 7px;">Events</div>
+                                    <h4 style="font-family: var(--font-heading); font-size: 1.3rem; color: var(--text-white); line-height: 1.3; margin-bottom: 8px;">Recap: The STACKLY Chef's Table Valentine's Dinner 2026</h4>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">Jan 28, 2026 · 3 min read</span>
+                                </div>
+                            </a>
+
+                            <a href="404.html" style="display: grid; grid-template-columns: 140px 1fr; gap: 25px; padding: 25px 0; border-bottom: 1px solid rgba(197,160,89,0.1); text-decoration: none; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'" data-cat="recipes">
+                                <div style="border-radius: 8px; overflow: hidden; height: 100px;">
+                                    <img src="images/image_8.webp" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary); margin-bottom: 7px;">Recipes</div>
+                                    <h4 style="font-family: var(--font-heading); font-size: 1.3rem; color: var(--text-white); line-height: 1.3; margin-bottom: 8px;">Tokusen Wagyu at Home: A Chef's 5-Step Guide to Restaurant Quality</h4>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">Jan 18, 2026 · 10 min read</span>
+                                </div>
+                            </a>
+
+                            <a href="404.html" style="display: grid; grid-template-columns: 140px 1fr; gap: 25px; padding: 25px 0; text-decoration: none; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'" data-cat="wine">
+                                <div style="border-radius: 8px; overflow: hidden; height: 100px;">
+                                    <img src="images/image_17.webp" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary); margin-bottom: 7px;">Wine & Cocktails</div>
+                                    <h4 style="font-family: var(--font-heading); font-size: 1.3rem; color: var(--text-white); line-height: 1.3; margin-bottom: 8px;">The Golden Orchid Mezcal Cocktail — Story Behind a Legend</h4>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">Jan 10, 2026 · 4 min read</span>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="pagination">
+                            <button class="page-btn arrow-btn"><i class="fa fa-chevron-left"></i></button>
+                            <button class="page-btn active">1</button>
+                            <button class="page-btn">2</button>
+                            <button class="page-btn">3</button>
+                            <button class="page-btn">4</button>
+                            <button class="page-btn arrow-btn"><i class="fa fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div>
+                        <!-- Trending -->
+                        <div class="sidebar-panel" style="margin-bottom: 30px;">
+                            <h3 class="sidebar-heading">Trending Now</h3>
+                            <a href="404.html" class="trending-item">
+                                <div class="trending-num">01</div>
+                                <div>
+                                    <div class="trending-cat">Recipes</div>
+                                    <div class="trending-title">Our Signature Greek Salad: The Recipe We Almost Never Shared</div>
+                                    <div class="trending-date">March 28, 2026</div>
+                                </div>
+                            </a>
+                            <a href="404.html" class="trending-item">
+                                <div class="trending-num">02</div>
+                                <div>
+                                    <div class="trending-cat">Wine & Cocktails</div>
+                                    <div class="trending-title">Pairing Wine with South Indian Food — Our Sommelier's Guide</div>
+                                    <div class="trending-date">March 15, 2026</div>
+                                </div>
+                            </a>
+                            <a href="404.html" class="trending-item">
+                                <div class="trending-num">03</div>
+                                <div>
+                                    <div class="trending-cat">Behind the Scenes</div>
+                                    <div class="trending-title">Inside the STACKLY Kitchen: A Night with Chef Lorenzo</div>
+                                    <div class="trending-date">April 2, 2026</div>
+                                </div>
+                            </a>
+                            <a href="404.html" class="trending-item">
+                                <div class="trending-num">04</div>
+                                <div>
+                                    <div class="trending-cat">Ingredients</div>
+                                    <div class="trending-title">The Tamil Nadu Pantry: 7 Indigenous Ingredients We Swear By</div>
+                                    <div class="trending-date">March 22, 2026</div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Tags -->
+                        <div class="sidebar-panel" style="margin-bottom: 30px;">
+                            <h3 class="sidebar-heading">Explore Topics</h3>
+                            <div class="tags-cloud">
+                                <span class="tag-pill">Recipes</span>
+                                <span class="tag-pill">Wine</span>
+                                <span class="tag-pill">Tamil Nadu</span>
+                                <span class="tag-pill">Fine Dining</span>
+                                <span class="tag-pill">Chef's Table</span>
+                                <span class="tag-pill">Cocktails</span>
+                                <span class="tag-pill">Behind the Scenes</span>
+                                <span class="tag-pill">Events</span>
+                                <span class="tag-pill">Wagyu</span>
+                                <span class="tag-pill">Desserts</span>
+                                <span class="tag-pill">Seasonal Menu</span>
+                                <span class="tag-pill">Mixology</span>
+                                <span class="tag-pill">Ingredients</span>
+                                <span class="tag-pill">Farm to Table</span>
+                            </div>
+                        </div>
+
+                        <!-- About the Journal -->
+                        <div class="sidebar-panel">
+                            <h3 class="sidebar-heading">About This Journal</h3>
+                            <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 15px;">
+                                <div style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; border: 2px solid var(--primary);">
+                                    <img src="images/image_11.webp" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div>
+                                    <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 20px;">
+                                        Written by Chef Lorenzo and the STACKLY team. Every word here comes from real kitchens, real ingredients, and genuine passion for the craft of fine dining.
+                                    </p>
+                                    <a href="about.html" class="btn btn-outline" style="padding: 10px 28px; font-size: 0.75rem;">Meet the Team</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End bottom row -->
+
+            </div>
+        </section>
+
+        <!-- CTA Band -->
+        <div class="cta-band">
+            <h2>Inspired? Come<br><em>Taste the Story.</em></h2>
+            <a href="index.html#contact" class="btn-dark btn">Reserve a Table</a>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer text-center" style="padding: 100px 0 50px; background: rgba(14,36,31,1); border-top: 1px solid var(--glass);">
+        <div class="container">
+            <h2 class="logo" style="font-size: 3rem; margin-bottom: 20px;">STACKLY</h2>
+            <p style="opacity: 0.5; margin-bottom: 40px; font-style: italic;">"Modern Gastronomy. Classic Soul."</p>
+            <style>.footer-links a:hover { color: var(--primary) !important; }</style>
+            <div class="footer-links" style="display: flex; justify-content: center; gap: 30px; margin-bottom: 40px; flex-wrap: wrap;">
+                <a href="about.html" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">About Us</a>
+                <a href="menu.html" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">Menu</a>
+                <a href="services.html" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">Services</a>
+                <a href="blog.html" style="color: var(--primary); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">Blogs</a>
+                <a href="index.html#contact" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">Contact</a>
+                <a href="index.html" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">Home</a>
+            </div>
+            <div class="social-icons" style="flex-direction: row; justify-content: center; margin-bottom: 40px;">
+                <a href="404.html"><i class="fa-brands fa-instagram"></i></a>
+                <a href="404.html"><i class="fa-brands fa-facebook"></i></a>
+                <a href="404.html"><i class="fa-brands fa-twitter"></i></a>
+                <a href="404.html"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+            <p style="font-size: 0.8rem; opacity: 0.4;">&copy; 2026 STACKLY Restaurant. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Hero zoom on load
+        window.addEventListener('load', () => {
+            const bg = document.getElementById('hero-bg-img');
+            if (bg) { bg.style.transform = 'scale(1)'; bg.style.transition = 'transform 10s ease'; }
+        });
+
+        // Category filter
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const blogCards  = document.querySelectorAll('#blogGrid .blog-card');
+        const morePosts  = document.querySelectorAll('#morePosts a');
+        const featuredPost = document.querySelector('.featured-post');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const cat = btn.dataset.cat;
+
+                // Filter blog grid cards
+                blogCards.forEach(card => {
+                    const match = cat === 'all' || card.dataset.cat === cat;
+                    card.style.display = match ? 'flex' : 'none';
+                });
+
+                // Filter more-posts list items
+                morePosts.forEach(item => {
+                    const match = cat === 'all' || item.dataset.cat === cat;
+                    item.style.display = match ? 'grid' : 'none';
+                });
+
+                // Featured post
+                if (featuredPost) {
+                    const match = cat === 'all' || featuredPost.dataset.cat === cat;
+                    featuredPost.style.display = match ? 'grid' : 'none';
+                }
+            });
+        });
+
+        // Pagination buttons (cosmetic)
+        document.querySelectorAll('.page-btn:not(.arrow-btn)').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.page-btn:not(.arrow-btn)').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // Newsletter button feedback
+        const newsletterBtn = document.querySelector('.newsletter-btn');
+        if (newsletterBtn) {
+            newsletterBtn.addEventListener('click', () => {
+                newsletterBtn.textContent = '✓ Subscribed!';
+                newsletterBtn.style.background = 'var(--bg-deep)';
+                newsletterBtn.style.color = 'var(--primary)';
+                setTimeout(() => {
+                    newsletterBtn.textContent = 'Subscribe';
+                    newsletterBtn.style.background = '';
+                    newsletterBtn.style.color = '';
+                }, 3000);
+            });
+        }
+    </script>
+</body>
+</html>

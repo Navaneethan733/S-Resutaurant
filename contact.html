@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | STACKLY</title>
+    <meta name="description" content="Reach out to STACKLY. Reserve a table, plan a private event, or simply say hello. We're in Salem, Tamilnadu.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ── Page-specific styles ── */
+
+        /* Hero */
+        .contact-hero {
+            min-height: 55vh;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 80px;
+            position: relative;
+            overflow: hidden;
+            background: var(--bg-deep);
+        }
+
+        .contact-hero-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 80%, rgba(197,160,89,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 80% at 80% 20%, rgba(197,160,89,0.05) 0%, transparent 60%);
+        }
+
+        .contact-hero-arch {
+            position: absolute;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 320px;
+            height: 420px;
+            border-radius: 0 0 300px 300px;
+            overflow: hidden;
+            border: 1px solid rgba(197,160,89,0.2);
+            border-top: none;
+            opacity: 0.35;
+        }
+
+        .contact-hero-arch img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+
+        .contact-hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        /* Section label */
+        .section-label {
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            font-size: 0.72rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        /* ── Info + Form Grid ── */
+        .contact-main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            gap: 80px;
+            align-items: start;
+        }
+
+        /* Info side */
+        .info-block {
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        .info-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: 1px solid rgba(197,160,89,0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1rem;
+            flex-shrink: 0;
+            transition: all 0.4s var(--transition);
+        }
+
+        .info-item:hover .info-icon {
+            background: var(--primary);
+            color: var(--bg-deep);
+        }
+
+        .info-text h4 {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            margin-bottom: 6px;
+        }
+
+        .info-text p, .info-text a {
+            opacity: 0.65;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text-white);
+            text-decoration: none;
+        }
+
+        .info-text a:hover { color: var(--primary); opacity: 1; }
+
+        /* Hours table */
+        .hours-table {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .hours-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed rgba(197,160,89,0.15);
+            font-size: 0.9rem;
+        }
+
+        .hours-row:last-child { border-bottom: none; }
+        .hours-row span:first-child { opacity: 0.65; }
+        .hours-row span:last-child { color: var(--primary); font-weight: 600; letter-spacing: 1px; }
+
+        /* Social strip */
+        .social-strip {
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .social-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid rgba(197,160,89,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-white);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.4s var(--transition);
+        }
+
+        .social-btn:hover {
+            background: var(--primary);
+            color: var(--bg-deep);
+            border-color: var(--primary);
+            transform: translateY(-4px);
+        }
+
+        /* ── Form ── */
+        .form-panel {
+            background: rgba(14,36,31,0.7);
+            border: 1px solid rgba(197,160,89,0.15);
+            padding: 56px 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-panel::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 200px; height: 200px;
+            border-radius: 50%;
+            border: 1px solid rgba(197,160,89,0.08);
+            pointer-events: none;
+        }
+
+        .form-panel::after {
+            content: '';
+            position: absolute;
+            bottom: -80px; left: -80px;
+            width: 260px; height: 260px;
+            border-radius: 50%;
+            border: 1px solid rgba(197,160,89,0.06);
+            pointer-events: none;
+        }
+
+        .form-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(197,160,89,0.15);
+        }
+
+        .form-tab {
+            padding: 12px 28px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-muted);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            transition: all 0.3s;
+            background: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+
+        .form-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .form-tab:hover:not(.active) { color: var(--text-white); }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: flex; flex-direction: column; gap: 24px; }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+        }
+
+        .field-group label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+        }
+
+        .field-group input,
+        .field-group select,
+        .field-group textarea {
+            background: none;
+            border: none;
+            border-bottom: 1px solid rgba(197,160,89,0.25);
+            padding: 14px 0;
+            color: var(--text-white);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+            width: 100%;
+        }
+
+        .field-group select option { background: var(--bg-offset); }
+
+        .field-group input:focus,
+        .field-group select:focus,
+        .field-group textarea:focus {
+            border-bottom-color: var(--primary);
+        }
+
+        .field-group textarea { resize: none; min-height: 100px; }
+
+        .field-group input::placeholder,
+        .field-group textarea::placeholder { color: rgba(255,255,255,0.25); }
+
+        /* Number stepper */
+        .stepper {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(197,160,89,0.25);
+        }
+
+        .stepper-btn {
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            border: 1px solid rgba(197,160,89,0.4);
+            background: none;
+            color: var(--primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .stepper-btn:hover { background: var(--primary); color: var(--bg-deep); }
+
+        .stepper-val {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        /* Success message */
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            border: 1px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        /* ── Map section ── */
+        .map-section {
+            background: var(--bg-offset);
+        }
+
+        .map-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.8fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .map-embed {
+            width: 100%;
+            height: 420px;
+            border-radius: 300px 300px 0 0;
+            overflow: hidden;
+            border: 1px solid rgba(197,160,89,0.2);
+            position: relative;
+        }
+
+        .map-embed iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            filter: grayscale(100%) invert(90%) hue-rotate(170deg) brightness(0.85) contrast(0.9);
+        }
+
+        .map-overlay-label {
+            position: absolute;
+            bottom: 24px; left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: var(--bg-deep);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 8px 20px;
+            white-space: nowrap;
+        }
+
+        .directions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .dir-item {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            padding-bottom: 28px;
+            border-bottom: 1px solid rgba(197,160,89,0.1);
+        }
+
+        .dir-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+        .dir-num {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: rgba(197,160,89,0.2);
+            line-height: 1;
+            min-width: 50px;
+        }
+
+        .dir-text h4 {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+        }
+
+        .dir-text p { opacity: 0.6; font-size: 0.9rem; }
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .contact-main-grid { grid-template-columns: 1fr; gap: 60px; }
+            .map-grid { grid-template-columns: 1fr; }
+            .map-embed { height: 340px; border-radius: 200px 200px 0 0; }
+            .form-panel { padding: 40px 32px; }
+        }
+
+        @media (max-width: 768px) {
+            .contact-hero { min-height: 45vh; padding-bottom: 60px; }
+            .contact-hero-arch { width: 200px; height: 280px; }
+            .form-panel { padding: 32px 20px; }
+            .form-row { grid-template-columns: 1fr; gap: 0; }
+            .form-tabs { overflow-x: auto; }
+            .form-tab { padding: 12px 18px; font-size: 0.72rem; white-space: nowrap; }
+            .map-embed { height: 280px; border-radius: 140px 140px 0 0; }
+        }
+
+        @media (max-width: 480px) {
+            .info-item { flex-direction: column; gap: 12px; }
+            .form-panel { padding: 28px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-content text-center">
+            <h1 class="logo" style="font-size: 4rem; opacity: 0.5;">STACKLY</h1>
+            <div style="width: 200px; height: 1px; background: rgba(255,255,255,0.1); margin: 20px auto; overflow: hidden;">
+                <div class="loader-bar" style="width: 0%; height: 100%; background: var(--primary);"></div>
+            </div>
+            <p style="text-transform: uppercase; letter-spacing: 5px; font-size: 0.8rem;">Setting the table...</p>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="logo">STACKLY</a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="menu.html" class="nav-link">Menu</a>
+                <a href="about.html" class="nav-link">About Us</a>
+                <a href="blogs.html" class="nav-link">Blogs</a>
+                <a href="contact.html" class="nav-link" style="color: var(--primary);">Contact</a>
+            </nav>
+            <div class="nav-cta">
+                <a href="login.html" class="btn btn-primary" style="padding: 10px 28px;">Login</a>
+            </div>
+            <button class="mobile-toggle">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- ── Hero ── -->
+        <section class="contact-hero">
+            <div class="contact-hero-bg"></div>
+            <div class="contact-hero-arch">
+                <img src="images/image_1.webp" alt="Restaurant interior">
+            </div>
+            <div class="contact-hero-content">
+                <span class="section-label">✦ Come Find Us ✦</span>
+                <h1 class="hero-title anim-title" style="margin-bottom: 16px;">Let's Connect</h1>
+                <p class="hero-subtitle" style="font-size: 1rem; letter-spacing: 3px;">Reserve · Enquire · Visit</p>
+            </div>
+        </section>
+
+        <!-- ── Marquee ── -->
+        <div class="marquee-section text-gold">
+            <div class="marquee-content">
+                <span>RESERVATIONS</span> ✦ <span>PRIVATE DINING</span> ✦ <span>EVENTS</span> ✦ <span>CORPORATE BOOKINGS</span> ✦ <span>CATERING</span> ✦ <span>RESERVATIONS</span> ✦ <span>PRIVATE DINING</span> ✦ <span>EVENTS</span> ✦ <span>CORPORATE BOOKINGS</span> ✦ <span>CATERING</span> ✦
+            </div>
+        </div>
+
+        <!-- ── Info + Form ── -->
+        <section class="section" style="background: var(--bg-deep);">
+            <div class="container">
+                <div class="contact-main-grid">
+
+                    <!-- Info Column -->
+                    <div class="info-block">
+                        <div>
+                            <span class="section-label">✦ Find Us ✦</span>
+                            <h2 class="kinetic-header" style="font-size: clamp(2rem, 5vw, 3.5rem); margin-bottom: 0;">Visit the<br>Restaurant</h2>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon"><i class="fa fa-map-marker-alt"></i></div>
+                            <div class="info-text">
+                                <h4>Address</h4>
+                                <p>12, Omalur Main Road,<br>Five Roads Junction,<br>Salem – 636 004, Tamil Nadu, India</p>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon"><i class="fa fa-phone-alt"></i></div>
+                            <div class="info-text">
+                                <h4>Phone</h4>
+                                <a href="tel:+919876543210">+91 98765 43210</a><br>
+                                <a href="tel:+914272456789">+91 427 245 6789</a>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon"><i class="fa fa-envelope"></i></div>
+                            <div class="info-text">
+                                <h4>Email</h4>
+                                <a href="mailto:hello@stackly.in">hello@stackly.in</a><br>
+                                <a href="mailto:events@stackly.in">events@stackly.in</a>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon"><i class="fa fa-clock"></i></div>
+                            <div class="info-text">
+                                <h4>Opening Hours</h4>
+                                <div class="hours-table">
+                                    <div class="hours-row">
+                                        <span>Monday – Thursday</span>
+                                        <span>12PM – 11PM</span>
+                                    </div>
+                                    <div class="hours-row">
+                                        <span>Friday – Saturday</span>
+                                        <span>12PM – 1AM</span>
+                                    </div>
+                                    <div class="hours-row">
+                                        <span>Sunday</span>
+                                        <span>11AM – 10PM</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p class="section-label" style="margin-bottom: 16px;">✦ Follow Us ✦</p>
+                            <div class="social-strip">
+                                <a href="404.html" class="social-btn"><i class="fa-brands fa-instagram"></i></a>
+                                <a href="404.html" class="social-btn"><i class="fa-brands fa-facebook"></i></a>
+                                <a href="404.html" class="social-btn"><i class="fa-brands fa-youtube"></i></a>
+                                <a href="404.html" class="social-btn"><i class="fa-brands fa-twitter"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Column -->
+                    <div class="form-panel">
+
+                        <!-- Tabs -->
+                        <div class="form-tabs">
+                            <button class="form-tab active" data-tab="reservation">Reservation</button>
+                            <button class="form-tab" data-tab="enquiry">General Enquiry</button>
+                            <button class="form-tab" data-tab="event">Private Event</button>
+                        </div>
+
+                        <!-- Reservation Tab -->
+                        <div class="tab-content active" id="tab-reservation">
+                            <div class="form-row">
+                                <div class="field-group">
+                                    <label>First Name</label>
+                                    <input type="text" placeholder="Arjun">
+                                </div>
+                                <div class="field-group">
+                                    <label>Last Name</label>
+                                    <input type="text" placeholder="Krishnan">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="field-group">
+                                    <label>Phone</label>
+                                    <input type="tel" placeholder="+91 98765 43210">
+                                </div>
+                                <div class="field-group">
+                                    <label>Email</label>
+                                    <input type="email" placeholder="you@example.com">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="field-group">
+                                    <label>Date</label>
+                                    <input type="date">
+                                </div>
+                                <div class="field-group">
+                                    <label>Time</label>
+                                    <select>
+                                        <option value="">Select a time</option>
+                                        <option>12:00 PM</option>
+                                        <option>1:00 PM</option>
+                                        <option>2:00 PM</option>
+                                        <option>7:00 PM</option>
+                                        <option>7:30 PM</option>
+                                        <option>8:00 PM</option>
+                                        <option>8:30 PM</option>
+                                        <option>9:00 PM</option>
+                                        <option>9:30 PM</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="field-group">
+                                <label>Number of Guests</label>
+                                <div class="stepper">
+                                    <button class="stepper-btn" id="guest-minus">−</button>
+                                    <span class="stepper-val" id="guest-val">2</span>
+                                    <button class="stepper-btn" id="guest-plus">+</button>
+                                    <span style="opacity: 0.5; font-size: 0.85rem; margin-left: 10px;">guests</span>
+                                </div>
+                            </div>
+                            <div class="field-group">
+                                <label>Special Requests</label>
+                                <textarea placeholder="Dietary requirements, occasion, seating preferences…"></textarea>
+                            </div>
+                            <button class="btn btn-primary" onclick="handleSubmit(this)" style="width: 100%; margin-top: 8px;">
+                                Confirm Reservation &nbsp;<i class="fa fa-arrow-right"></i>
+                            </button>
+                        </div>
+
+                        <!-- General Enquiry Tab -->
+                        <div class="tab-content" id="tab-enquiry">
+                            <div class="form-row">
+                                <div class="field-group">
+                                    <label>Your Name</label>
+                                    <input type="text" placeholder="Full Name">
+                                </div>
+                                <div class="field-group">
+                                    <label>Email</label>
+                                    <input type="email" placeholder="you@example.com">
+                                </div>
+                            </div>
+                            <div class="field-group">
+                                <label>Subject</label>
+                                <select>
+                                    <option value="">Choose a topic</option>
+                                    <option>Menu Information</option>
+                                    <option>Dietary Requirements</option>
+                                    <option>Gift Vouchers</option>
+                                    <option>Feedback</option>
+                                    <option>Press & Media</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div class="field-group">
+                                <label>Message</label>
+                                <textarea placeholder="Write your message here…" style="min-height: 140px;"></textarea>
+                            </div>
+                            <button class="btn btn-primary" onclick="handleSubmit(this)" style="width: 100%; margin-top: 8px;">
+                                Send Message &nbsp;<i class="fa fa-paper-plane"></i>
+                            </button>
+                        </div>
+
+                        <!-- Private Event Tab -->
+                        <div class="tab-content" id="tab-event">
+                            <div class="form-row">
+                                <div class="field-group">
+                                    <label>Full Name</label>
+                                    <input type="text" placeholder="Full Name">
+                                </div>
+                                <div class="field-group">
+                                    <label>Organisation (Optional)</label>
+                                    <input type="text" placeholder="Company / Family Name">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="field-group">
+                                    <label>Email</label>
+                                    <input type="email" placeholder="you@example.com">
+                                </div>
+                                <div class="field-group">
+                                    <label>Phone</label>
+                                    <input type="tel" placeholder="+91 98765 43210">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="field-group">
+                                    <label>Event Type</label>
+                                    <select>
+                                        <option value="">Select type</option>
+                                        <option>Birthday Celebration</option>
+                                        <option>Anniversary Dinner</option>
+                                        <option>Corporate Dinner</option>
+                                        <option>Wedding Reception</option>
+                                        <option>Product Launch</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                                <div class="field-group">
+                                    <label>Preferred Date</label>
+                                    <input type="date">
+                                </div>
+                            </div>
+                            <div class="field-group">
+                                <label>Estimated Guest Count</label>
+                                <div class="stepper">
+                                    <button class="stepper-btn" id="event-minus">−</button>
+                                    <span class="stepper-val" id="event-val">20</span>
+                                    <button class="stepper-btn" id="event-plus">+</button>
+                                    <span style="opacity: 0.5; font-size: 0.85rem; margin-left: 10px;">guests</span>
+                                </div>
+                            </div>
+                            <div class="field-group">
+                                <label>Additional Details</label>
+                                <textarea placeholder="Tell us about your event, theme, catering preferences, budget range…" style="min-height: 120px;"></textarea>
+                            </div>
+                            <button class="btn btn-primary" onclick="handleSubmit(this)" style="width: 100%; margin-top: 8px;">
+                                Request a Quote &nbsp;<i class="fa fa-arrow-right"></i>
+                            </button>
+                        </div>
+
+                        <!-- Success State (hidden initially) -->
+                        <div class="form-success" id="form-success">
+                            <div class="success-icon"><i class="fa fa-check"></i></div>
+                            <h3 style="font-family: var(--font-heading); font-size: 2rem; margin-bottom: 12px;">Thank You!</h3>
+                            <p style="opacity: 0.65; margin-bottom: 28px;">We've received your message and will be in touch within 24 hours.</p>
+                            <button class="btn btn-outline" onclick="resetForm()" style="padding: 12px 32px;">Send Another</button>
+                        </div>
+
+                    </div>
+                    <!-- /Form Column -->
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Map + Directions ── -->
+        <section class="section map-section">
+            <div class="container">
+                <div style="text-align: center; margin-bottom: 70px;">
+                    <span class="section-label">✦ Getting Here ✦</span>
+                    <h2 class="kinetic-header" style="font-size: clamp(2.2rem, 5vw, 4rem); margin-bottom: 0;">Find Your Way<br>to STACKLY</h2>
+                </div>
+                <div class="map-grid">
+                    <div style="position: relative;">
+                        <div class="map-embed">
+                            <!-- Styled OpenStreetMap embed for Salem, TN -->
+                            <iframe
+                                src="https://www.openstreetmap.org/export/embed.html?bbox=78.05,11.62,78.22,11.72&layer=mapnik&marker=11.6643,78.1460"
+                                loading="lazy"
+                                title="STACKLY Restaurant Location, Salem">
+                            </iframe>
+                            <div class="map-overlay-label">STACKLY · Salem</div>
+                        </div>
+                        <a href="https://maps.google.com/?q=Salem,Tamil+Nadu,India" target="_blank" rel="noopener noreferrer"
+                            class="btn btn-outline" style="display: block; text-align: center; margin-top: 20px; padding: 14px 24px;">
+                            <i class="fa fa-directions" style="margin-right: 8px;"></i>Open in Google Maps
+                        </a>
+                    </div>
+
+                    <div class="directions-list">
+                        <div class="dir-item">
+                            <div class="dir-num">01</div>
+                            <div class="dir-text">
+                                <h4>By Car</h4>
+                                <p>Take the Salem bypass via NH-44. Exit at Five Roads junction towards Omalur Main Road. We're 400m on your left. Free valet parking available from 6PM.</p>
+                            </div>
+                        </div>
+                        <div class="dir-item">
+                            <div class="dir-num">02</div>
+                            <div class="dir-text">
+                                <h4>By Auto / Cab</h4>
+                                <p>Ask for STACKLY at Five Roads, Omalur Main Road. A 10-minute ride from Salem New Bus Stand and 15 minutes from Salem Junction Railway Station.</p>
+                            </div>
+                        </div>
+                        <div class="dir-item">
+                            <div class="dir-num">03</div>
+                            <div class="dir-text">
+                                <h4>By Bus</h4>
+                                <p>Board any city bus towards Omalur from Salem New Bus Stand. Deboard at Five Roads stop — we're right across the junction.</p>
+                            </div>
+                        </div>
+                        <div class="dir-item">
+                            <div class="dir-num">04</div>
+                            <div class="dir-text">
+                                <h4>Parking</h4>
+                                <p>Complimentary valet parking is available every evening. A dedicated parking bay is located 50m west of the main entrance for daytime visits.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer text-center" style="padding: 100px 0 50px; background: rgba(14,36,31,1); border-top: 1px solid var(--glass);">
+        <div class="container">
+            <h2 class="logo" style="font-size: 3rem; margin-bottom: 20px;">STACKLY</h2>
+            <p style="opacity: 0.5; margin-bottom: 40px; font-style: italic;">"Modern Gastronomy. Classic Soul."</p>
+            <div class="footer-links" style="display: flex; justify-content: center; gap: 30px; margin-bottom: 40px; flex-wrap: wrap;">
+                <a href="index.html" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">Home</a>
+                <a href="about.html" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">About Us</a>
+                <a href="menu.html" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">Menu</a>
+                <a href="services.html" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">Services</a>
+                <a href="blogs.html" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">Blogs</a>
+                <a href="contact.html" style="color: var(--primary); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;">Contact</a>
+            </div>
+            <div class="social-icons" style="flex-direction: row; justify-content: center; margin-bottom: 40px;">
+                <a href="404.html"><i class="fa-brands fa-instagram"></i></a>
+                <a href="404.html"><i class="fa-brands fa-facebook"></i></a>
+                <a href="404.html"><i class="fa-brands fa-twitter"></i></a>
+                <a href="404.html"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+            <p style="font-size: 0.8rem; opacity: 0.4;">&copy; 2026 STACKLY Restaurant. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        /* ── Tab Switching ── */
+        document.querySelectorAll('.form-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.form-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                document.getElementById('form-success').style.display = 'none';
+                tab.classList.add('active');
+                document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        /* ── Guest Stepper (Reservation) ── */
+        let guests = 2;
+        document.getElementById('guest-minus').addEventListener('click', () => {
+            if (guests > 1) { guests--; document.getElementById('guest-val').textContent = guests; }
+        });
+        document.getElementById('guest-plus').addEventListener('click', () => {
+            if (guests < 20) { guests++; document.getElementById('guest-val').textContent = guests; }
+        });
+
+        /* ── Guest Stepper (Event) ── */
+        let eventGuests = 20;
+        document.getElementById('event-minus').addEventListener('click', () => {
+            if (eventGuests > 10) { eventGuests -= 10; document.getElementById('event-val').textContent = eventGuests; }
+        });
+        document.getElementById('event-plus').addEventListener('click', () => {
+            if (eventGuests < 500) { eventGuests += 10; document.getElementById('event-val').textContent = eventGuests; }
+        });
+
+        /* ── Form Submit ── */
+        function handleSubmit(btn) {
+            const panel = btn.closest('.form-panel');
+            const tabs = panel.querySelector('.form-tabs');
+            const contents = panel.querySelectorAll('.tab-content');
+            const success = document.getElementById('form-success');
+
+            // Animate out
+            contents.forEach(c => { if (c.classList.contains('active')) c.style.display = 'none'; });
+            tabs.style.opacity = '0.3';
+            tabs.style.pointerEvents = 'none';
+            success.style.display = 'block';
+
+            if (typeof gsap !== 'undefined') {
+                gsap.from(success, { y: 30, opacity: 0, duration: 0.6, ease: 'power3.out' });
+            }
+        }
+
+        function resetForm() {
+            const panel = document.querySelector('.form-panel');
+            const tabs = panel.querySelector('.form-tabs');
+            const success = document.getElementById('form-success');
+
+            success.style.display = 'none';
+            tabs.style.opacity = '1';
+            tabs.style.pointerEvents = 'auto';
+
+            // Reset to first tab
+            document.querySelectorAll('.form-tab').forEach((t, i) => t.classList.toggle('active', i === 0));
+            document.querySelectorAll('.tab-content').forEach((c, i) => c.classList.toggle('active', i === 0));
+        }
+    </script>
+</body>
+</html>

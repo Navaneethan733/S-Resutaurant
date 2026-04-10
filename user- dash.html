@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account | STACKLY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #c5a059;
+            --primary-light: #dec088;
+            --primary-dark: #8c7b5a;
+            --bg-deep: #0b1c18;
+            --bg-offset: #0e241f;
+            --bg-card: #112820;
+            --text-white: #fefefe;
+            --text-muted: #a6b1af;
+            --glass: rgba(197,160,89,0.06);
+            --border: rgba(197,160,89,0.15);
+            --font-heading: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
+            --sidebar-w: 240px;
+            --topbar-h: 68px;
+            --transition: cubic-bezier(0.23,1,0.32,1);
+            --danger: #e05252;
+            --success: #5ab585;
+            --warning: #e8a838;
+            --info: #4a9eda;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { background: var(--bg-deep); color: var(--text-white); font-family: var(--font-body); overflow-x: hidden; }
+
+        /* ═══ LAYOUT ═══ */
+        .dash-layout { display: flex; min-height: 100vh; }
+
+        /* ═══ SIDEBAR ═══ */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: var(--bg-offset);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0; left: 0; bottom: 0;
+            z-index: 200;
+            transition: transform 0.4s var(--transition);
+            overflow-y: auto;
+        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--border); }
+
+        .sidebar-logo {
+            padding: 28px 24px 22px;
+            border-bottom: 1px solid var(--border);
+        }
+        .sidebar-logo a {
+            font-family: var(--font-heading);
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: var(--text-white);
+            text-decoration: none;
+        }
+        .sidebar-logo-sub { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 3px; color: var(--primary); margin-top: 3px; }
+
+        .sidebar-section { padding: 22px 14px 6px; }
+        .sidebar-section-label { font-size: 0.63rem; text-transform: uppercase; letter-spacing: 3px; color: var(--text-muted); padding: 0 10px; margin-bottom: 7px; }
+
+        .nav-item {
+            display: flex; align-items: center; gap: 11px;
+            padding: 10px 12px; border-radius: 6px;
+            color: var(--text-muted); text-decoration: none;
+            font-size: 0.86rem; font-weight: 500;
+            transition: all 0.25s; margin-bottom: 2px;
+            cursor: pointer; border: none; background: none;
+            width: 100%; text-align: left;
+        }
+        .nav-item i { width: 17px; text-align: center; font-size: 0.82rem; }
+        .nav-item:hover { background: var(--glass); color: var(--text-white); }
+        .nav-item.active { background: rgba(197,160,89,0.12); color: var(--primary); border-left: 2px solid var(--primary); }
+
+        /* Tier badge in sidebar */
+        .tier-card {
+            margin: 16px;
+            background: linear-gradient(135deg, rgba(197,160,89,0.15) 0%, rgba(197,160,89,0.05) 100%);
+            border: 1px solid var(--border);
+            padding: 18px;
+        }
+        .tier-name { font-family: var(--font-heading); font-size: 1.4rem; color: var(--primary); margin-bottom: 4px; }
+        .tier-sub { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 14px; }
+        .tier-bar-track { height: 4px; background: rgba(197,160,89,0.12); border-radius: 2px; margin-bottom: 8px; }
+        .tier-bar-fill { height: 100%; background: linear-gradient(to right,var(--primary-dark),var(--primary)); border-radius: 2px; width: 68%; }
+        .tier-progress-text { font-size: 0.72rem; color: var(--text-muted); }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding: 14px;
+            border-top: 1px solid var(--border);
+        }
+        .sidebar-user {
+            display: flex; align-items: center; gap: 11px;
+            padding: 10px 10px; border-radius: 6px;
+            cursor: pointer; transition: background 0.25s;
+        }
+        .sidebar-user:hover { background: var(--glass); }
+        .sidebar-avatar {
+            width: 38px; height: 38px; border-radius: 50%;
+            background: var(--primary);
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-heading); font-size: 1.1rem;
+            color: var(--bg-deep); font-weight: 700; flex-shrink: 0;
+        }
+        .sidebar-user-name { font-size: 0.84rem; font-weight: 600; }
+        .sidebar-user-role { font-size: 0.7rem; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* ═══ MAIN ═══ */
+        .main-area { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+
+        /* ═══ TOPBAR ═══ */
+        .topbar {
+            height: var(--topbar-h);
+            background: var(--bg-offset);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center;
+            padding: 0 30px; gap: 16px;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .topbar-hamburger { display: none; background: none; border: none; color: var(--text-white); font-size: 1.2rem; cursor: pointer; padding: 8px; }
+        .topbar-greeting { flex: 1; }
+        .topbar-greeting-name { font-family: var(--font-heading); font-size: 1.4rem; }
+        .topbar-greeting-sub { font-size: 0.78rem; color: var(--text-muted); margin-top: 1px; }
+        .topbar-actions { display: flex; align-items: center; gap: 8px; }
+        .topbar-icon-btn {
+            width: 38px; height: 38px;
+            border: 1px solid var(--border); background: none;
+            color: var(--text-muted); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.9rem; transition: all 0.25s; position: relative;
+        }
+        .topbar-icon-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .notif-dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; background: var(--danger); border-radius: 50%; }
+        .reserve-btn {
+            background: var(--primary);
+            border: none;
+            color: var(--bg-deep);
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 10px 22px;
+            cursor: pointer;
+            transition: background 0.3s;
+            white-space: nowrap;
+        }
+        .reserve-btn:hover { background: var(--primary-light); }
+
+        /* ═══ CONTENT ═══ */
+        .page-content { padding: 28px 30px; flex: 1; }
+
+        /* ═══ VIEWS ═══ */
+        .view { display: none; }
+        .view.active { display: block; }
+
+        /* ═══ HERO WELCOME CARD ═══ */
+        .welcome-card {
+            background: linear-gradient(135deg, rgba(197,160,89,0.12) 0%, rgba(11,28,24,0) 60%);
+            border: 1px solid var(--border);
+            padding: 32px;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .welcome-card::before {
+            content: '✦';
+            position: absolute;
+            right: 32px; top: 50%;
+            transform: translateY(-50%);
+            font-size: 10rem;
+            color: rgba(197,160,89,0.05);
+            pointer-events: none;
+        }
+
+        /* ═══ STAT CARDS ═══ */
+        .stat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 22px; }
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 22px;
+            transition: border-color 0.3s, transform 0.3s var(--transition);
+        }
+        .stat-card:hover { border-color: var(--primary); transform: translateY(-3px); }
+        .stat-icon { font-size: 1.3rem; color: var(--primary); margin-bottom: 14px; }
+        .stat-value { font-family: var(--font-heading); font-size: 2.2rem; line-height: 1; margin-bottom: 5px; }
+        .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); }
+
+        /* ═══ GRID HELPERS ═══ */
+        .dash-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px; }
+        .dash-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+        .dash-grid-32 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 18px; }
+
+        /* ═══ TABLE CARD ═══ */
+        .table-card { background: var(--bg-card); border: 1px solid var(--border); overflow: hidden; margin-bottom: 18px; }
+        .table-card-header { padding: 16px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .table-card-title { font-family: var(--font-heading); font-size: 1.25rem; }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { padding: 11px 16px; text-align: left; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--border); white-space: nowrap; }
+        td { padding: 13px 16px; font-size: 0.86rem; border-bottom: 1px solid rgba(197,160,89,0.05); vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
+        tbody tr { transition: background 0.2s; }
+        tbody tr:hover { background: var(--glass); }
+
+        /* ═══ BADGES ═══ */
+        .badge { display: inline-block; padding: 3px 9px; font-size: 0.67rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; border-radius: 2px; }
+        .badge-success { background: rgba(90,181,133,0.15); color: var(--success); border: 1px solid rgba(90,181,133,0.3); }
+        .badge-warning { background: rgba(232,168,56,0.15); color: var(--warning); border: 1px solid rgba(232,168,56,0.3); }
+        .badge-danger  { background: rgba(224,82,82,0.15);  color: var(--danger);  border: 1px solid rgba(224,82,82,0.3); }
+        .badge-info    { background: rgba(74,158,218,0.15); color: var(--info);    border: 1px solid rgba(74,158,218,0.3); }
+        .badge-gold    { background: rgba(197,160,89,0.15); color: var(--primary); border: 1px solid rgba(197,160,89,0.3); }
+
+        /* ═══ ACTION BUTTON ═══ */
+        .act-btn { background: none; border: 1px solid var(--border); color: var(--text-muted); font-size: 0.74rem; padding: 5px 11px; cursor: pointer; transition: all 0.25s; font-family: var(--font-body); }
+        .act-btn:hover { border-color: var(--primary); color: var(--primary); }
+        .act-btn.danger:hover { border-color: var(--danger); color: var(--danger); }
+
+        /* ═══ INFO CARD (generic padded panel) ═══ */
+        .info-card { background: var(--bg-card); border: 1px solid var(--border); padding: 26px; margin-bottom: 18px; }
+        .info-card-title { font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+
+        /* ═══ MENU BROWSE ═══ */
+        .menu-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+        .menu-item-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: border-color 0.3s, transform 0.3s var(--transition);
+        }
+        .menu-item-card:hover { border-color: var(--primary); transform: translateY(-4px); }
+        .menu-item-img { width: 100%; height: 140px; object-fit: cover; display: block; }
+        .menu-item-body { padding: 16px; }
+        .menu-item-cat { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--primary); margin-bottom: 5px; }
+        .menu-item-name { font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: 5px; }
+        .menu-item-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 10px; }
+        .menu-item-price { font-size: 1rem; font-weight: 700; color: var(--primary); }
+
+        /* ═══ LOYALTY PERKS ═══ */
+        .perks-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+        .perk-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 20px;
+            display: flex; gap: 14px; align-items: flex-start;
+            transition: border-color 0.3s;
+        }
+        .perk-card:hover { border-color: var(--primary); }
+        .perk-icon { width: 42px; height: 42px; background: var(--glass); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1rem; flex-shrink: 0; }
+        .perk-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+        .perk-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; }
+        .perk-status { display: inline-block; margin-top: 8px; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1px; color: var(--success); }
+        .perk-status.locked { color: var(--text-muted); }
+
+        /* ═══ FORM ═══ */
+        .form-input-d { background: var(--bg-offset); border: 1px solid var(--border); outline: none; padding: 11px 14px; color: var(--text-white); font-family: var(--font-body); font-size: 0.86rem; transition: border-color 0.25s; width: 100%; }
+        .form-input-d:focus { border-color: var(--primary); }
+        .form-input-d::placeholder { color: var(--text-muted); }
+        .form-label-d { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 7px; display: block; }
+        .form-group-d { margin-bottom: 16px; }
+        .form-row-d { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .btn-primary-d { background: var(--primary); border: none; color: var(--bg-deep); font-family: var(--font-body); font-size: 0.76rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 12px 26px; cursor: pointer; transition: background 0.3s; }
+        .btn-primary-d:hover { background: var(--primary-light); }
+        .btn-outline-d { background: none; border: 1px solid var(--border); color: var(--text-muted); font-family: var(--font-body); font-size: 0.76rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; padding: 11px 22px; cursor: pointer; transition: all 0.3s; }
+        .btn-outline-d:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* ═══ SECTION HEADER ═══ */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+        .section-title { font-family: var(--font-heading); font-size: 1.55rem; }
+        .section-subtitle { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+
+        /* ═══ OVERLAY ═══ */
+        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 190; }
+        .sidebar-overlay.active { display: block; }
+
+        /* ═══ ANIMATIONS ═══ */
+        @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+        .view.active > * { animation: fadeSlideUp 0.35s var(--transition) both; }
+        .view.active > *:nth-child(2) { animation-delay: 0.05s; }
+        .view.active > *:nth-child(3) { animation-delay: 0.10s; }
+        .view.active > *:nth-child(4) { animation-delay: 0.15s; }
+
+        /* ═══ RESPONSIVE ═══ */
+        @media (max-width: 1100px) {
+            .stat-grid { grid-template-columns: repeat(2,1fr); }
+            .dash-grid-32 { grid-template-columns: 1fr; }
+            .menu-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 900px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-area { margin-left: 0; }
+            .topbar-hamburger { display: flex; }
+            .dash-grid-2, .dash-grid-3, .dash-grid-32 { grid-template-columns: 1fr; }
+            .page-content { padding: 18px 14px; }
+            .topbar { padding: 0 14px; }
+            .form-row-d { grid-template-columns: 1fr; }
+            .perks-grid { grid-template-columns: 1fr; }
+            .welcome-card { flex-direction: column; align-items: flex-start; }
+        }
+        @media (max-width: 600px) {
+            .stat-grid { grid-template-columns: 1fr 1fr; }
+            .menu-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 360px) {
+            .stat-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="dash-layout">
+
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+    <!-- ═══ SIDEBAR ═══ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <a href="index.html">STACKLY</a>
+            <div class="sidebar-logo-sub">Member Portal</div>
+        </div>
+
+        <!-- Tier Card -->
+        <div class="tier-card">
+            <div class="tier-name">Platinum</div>
+            <div class="tier-sub">Member Tier</div>
+            <div class="tier-bar-track"><div class="tier-bar-fill"></div></div>
+            <div class="tier-progress-text">₹68,400 / ₹1,00,000 to next level</div>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-label">My Account</div>
+            <button class="nav-item active" onclick="showView('home', this)"><i class="fa fa-house"></i> Home</button>
+            <button class="nav-item" onclick="showView('reservations', this)"><i class="fa fa-calendar-check"></i> My Reservations</button>
+            <button class="nav-item" onclick="showView('new-booking', this)"><i class="fa fa-calendar-plus"></i> Book a Table</button>
+            <button class="nav-item" onclick="showView('history', this)"><i class="fa fa-clock-rotate-left"></i> Visit History</button>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-label">Dining</div>
+            <button class="nav-item" onclick="showView('menu', this)"><i class="fa fa-utensils"></i> Browse Menu</button>
+            <button class="nav-item" onclick="showView('favourites', this)"><i class="fa fa-heart"></i> My Favourites</button>
+            <button class="nav-item" onclick="showView('reviews', this)"><i class="fa fa-star"></i> My Reviews</button>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-label">Membership</div>
+            <button class="nav-item" onclick="showView('loyalty', this)"><i class="fa fa-award"></i> Loyalty & Perks</button>
+            <button class="nav-item" onclick="showView('profile', this)"><i class="fa fa-user"></i> Profile & Settings</button>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-user">
+                <div class="sidebar-avatar" style="overflow:hidden"><img src="images/avatar_19.webp" style="width:100%;height:100%;object-fit:cover"></div>
+                <div>
+                    <div class="sidebar-user-name">Priya K.</div>
+                    <div class="sidebar-user-role">Platinum Member</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ═══ MAIN ═══ -->
+    <div class="main-area">
+        <header class="topbar">
+            <button class="topbar-hamburger" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
+            <div class="topbar-greeting">
+                <div class="topbar-greeting-name">Good Evening, <em style="color:var(--primary)">Priya</em> ✦</div>
+                <div class="topbar-greeting-sub" id="topbarDate"></div>
+            </div>
+            <div class="topbar-actions">
+                <button class="topbar-icon-btn"><i class="fa fa-bell"></i><span class="notif-dot"></span></button>
+                <button class="reserve-btn" onclick="showView('new-booking', document.querySelectorAll('.nav-item')[2])">Reserve a Table</button>
+                <a href="login.html" onclick="localStorage.removeItem('stackly_user')" class="topbar-icon-btn" style="text-decoration:none;display:flex;align-items:center;justify-content:center"><i class="fa fa-arrow-right-from-bracket"></i></a>
+            </div>
+        </header>
+
+        <div class="page-content">
+
+            <!-- ═══ HOME ═══ -->
+            <div class="view active" id="view-home">
+                <!-- Welcome Banner -->
+                <div class="welcome-card">
+                    <div>
+                        <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:3px;color:var(--primary);margin-bottom:8px">✦ Welcome Back ✦</div>
+                        <h2 style="font-family:var(--font-heading);font-size:clamp(1.8rem,3vw,2.8rem);line-height:1.15;margin-bottom:10px">
+                            Your table awaits,<br><em style="color:var(--primary)">Priya.</em>
+                        </h2>
+                        <p style="font-size:0.9rem;color:var(--text-muted);line-height:1.7;max-width:420px">You have 1 upcoming reservation and 2,450 loyalty points to redeem. Your next visit is in 2 days.</p>
+                    </div>
+                    <button class="btn-primary-d" style="white-space:nowrap;flex-shrink:0" onclick="showView('new-booking', document.querySelectorAll('.nav-item')[2])">+ Book a Table</button>
+                </div>
+
+                <!-- Stats -->
+                <div class="stat-grid">
+                    <div class="stat-card"><div class="stat-icon"><i class="fa fa-calendar-check"></i></div><div class="stat-value">24</div><div class="stat-label">Total Visits</div></div>
+                    <div class="stat-card"><div class="stat-icon"><i class="fa fa-indian-rupee-sign"></i></div><div class="stat-value">₹1.12L</div><div class="stat-label">Total Spent</div></div>
+                    <div class="stat-card"><div class="stat-icon"><i class="fa fa-award"></i></div><div class="stat-value">2,450</div><div class="stat-label">Loyalty Points</div></div>
+                    <div class="stat-card"><div class="stat-icon"><i class="fa fa-star"></i></div><div class="stat-value">5★</div><div class="stat-label">Last Review Given</div></div>
+                </div>
+
+                <!-- Upcoming + Recommended -->
+                <div class="dash-grid-32">
+                    <div class="table-card">
+                        <div class="table-card-header"><span class="table-card-title">Upcoming Reservations</span><button class="act-btn" onclick="showView('reservations', document.querySelectorAll('.nav-item')[1])">View All</button></div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead><tr><th>Date</th><th>Time</th><th>Covers</th><th>Table</th><th>Status</th><th></th></tr></thead>
+                                <tbody>
+                                    <tr><td><strong>Apr 12, 2026</strong><br><span style="font-size:0.72rem;color:var(--text-muted)">Saturday</span></td><td>7:30 PM</td><td>2</td><td>T-04</td><td><span class="badge badge-success">Confirmed</span></td><td><button class="act-btn danger">Cancel</button></td></tr>
+                                    <tr><td><strong>Apr 20, 2026</strong><br><span style="font-size:0.72rem;color:var(--text-muted)">Sunday</span></td><td>8:00 PM</td><td>4</td><td>T-08</td><td><span class="badge badge-warning">Pending</span></td><td><button class="act-btn danger">Cancel</button></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="info-card" style="margin-bottom:0">
+                        <div class="info-card-title">Loyalty Points</div>
+                        <div style="text-align:center;padding:10px 0">
+                            <div style="font-family:var(--font-heading);font-size:4rem;color:var(--primary);line-height:1">2,450</div>
+                            <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-muted);margin:8px 0 20px">Available Points</div>
+                            <div style="height:5px;background:rgba(197,160,89,0.1);border-radius:3px;margin-bottom:8px"><div style="height:100%;width:68%;background:linear-gradient(to right,var(--primary-dark),var(--primary));border-radius:3px"></div></div>
+                            <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:20px">68% to Gold tier</div>
+                            <button class="btn-primary-d" style="width:100%">Redeem Points</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Featured Dish -->
+                <div class="table-card">
+                    <div class="table-card-header"><span class="table-card-title">Chef's Recommendations For You</span><button class="act-btn" onclick="showView('menu', document.querySelectorAll('.nav-item')[4])">Full Menu</button></div>
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0">
+                        <div style="padding:20px;border-right:1px solid var(--border)">
+                            <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--primary);margin-bottom:6px">Main Dish</div>
+                            <div style="font-family:var(--font-heading);font-size:1.4rem;margin-bottom:6px">Greek Salad</div>
+                            <div style="font-size:0.78rem;color:var(--text-muted);line-height:1.6;margin-bottom:10px">Flavorful, pine nuts, sun-dried tomatoes, olives.</div>
+                            <div style="color:var(--primary);font-weight:600">₹2,450</div>
+                        </div>
+                        <div style="padding:20px;border-right:1px solid var(--border)">
+                            <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--primary);margin-bottom:6px">Cocktail</div>
+                            <div style="font-family:var(--font-heading);font-size:1.4rem;margin-bottom:6px">Velvet Midnight</div>
+                            <div style="font-size:0.78rem;color:var(--text-muted);line-height:1.6;margin-bottom:10px">Blackberry, gin, smoked rosemary, lemon.</div>
+                            <div style="color:var(--primary);font-weight:600">₹950</div>
+                        </div>
+                        <div style="padding:20px">
+                            <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:2px;color:var(--primary);margin-bottom:6px">Appetizer</div>
+                            <div style="font-family:var(--font-heading);font-size:1.4rem;margin-bottom:6px">Butternut Pumpkin</div>
+                            <div style="font-size:0.78rem;color:var(--text-muted);line-height:1.6;margin-bottom:10px">Crab meat, red onion, avocado, bell pepper.</div>
+                            <div style="color:var(--primary);font-weight:600">₹1,850</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ RESERVATIONS ═══ -->
+            <div class="view" id="view-reservations">
+                <div class="section-header" style="margin-bottom:18px">
+                    <div><div class="section-title">My Reservations</div><div class="section-subtitle">All bookings at a glance</div></div>
+                    <button class="btn-primary-d" onclick="showView('new-booking', document.querySelectorAll('.nav-item')[2])">+ New Booking</button>
+                </div>
+                <div class="table-card">
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Booking #</th><th>Date</th><th>Time</th><th>Covers</th><th>Table</th><th>Special Req.</th><th>Status</th><th></th></tr></thead>
+                            <tbody>
+                                <tr><td style="color:var(--text-muted)">#1024</td><td>Apr 12, 2026</td><td>7:30 PM</td><td>2</td><td>T-04</td><td>Window seat</td><td><span class="badge badge-success">Confirmed</span></td><td><button class="act-btn danger">Cancel</button></td></tr>
+                                <tr><td style="color:var(--text-muted)">#1020</td><td>Apr 20, 2026</td><td>8:00 PM</td><td>4</td><td>T-08</td><td>Birthday setup</td><td><span class="badge badge-warning">Pending</span></td><td><button class="act-btn danger">Cancel</button></td></tr>
+                                <tr><td style="color:var(--text-muted)">#1015</td><td>Mar 30, 2026</td><td>7:00 PM</td><td>2</td><td>T-02</td><td>—</td><td><span class="badge badge-info">Completed</span></td><td><button class="act-btn">Review</button></td></tr>
+                                <tr><td style="color:var(--text-muted)">#1008</td><td>Mar 14, 2026</td><td>8:30 PM</td><td>6</td><td>T-12</td><td>Vegan options</td><td><span class="badge badge-info">Completed</span></td><td><button class="act-btn">Review</button></td></tr>
+                                <tr><td style="color:var(--text-muted)">#0998</td><td>Feb 28, 2026</td><td>7:00 PM</td><td>2</td><td>T-01</td><td>Anniversary</td><td><span class="badge badge-danger">Cancelled</span></td><td>—</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ NEW BOOKING ═══ -->
+            <div class="view" id="view-new-booking">
+                <div class="section-header" style="margin-bottom:20px">
+                    <div><div class="section-title">Book a Table</div><div class="section-subtitle">Reserve your perfect evening at STACKLY</div></div>
+                </div>
+                <div class="dash-grid-2">
+                    <div class="info-card">
+                        <div class="info-card-title">Reservation Details</div>
+                        <div class="form-group-d"><label class="form-label-d">Date</label><input class="form-input-d" type="date" min="2026-04-10"></div>
+                        <div class="form-row-d">
+                            <div class="form-group-d"><label class="form-label-d">Time</label>
+                                <select class="form-input-d">
+                                    <option>7:00 PM</option><option>7:30 PM</option><option>8:00 PM</option>
+                                    <option>8:30 PM</option><option>9:00 PM</option><option>9:30 PM</option>
+                                </select>
+                            </div>
+                            <div class="form-group-d"><label class="form-label-d">Covers</label>
+                                <select class="form-input-d">
+                                    <option>1</option><option selected>2</option><option>3</option><option>4</option>
+                                    <option>5</option><option>6</option><option>7</option><option>8+</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group-d"><label class="form-label-d">Seating Preference</label>
+                            <select class="form-input-d">
+                                <option>No preference</option><option>Window seat</option>
+                                <option>Private dining room</option><option>Bar area</option><option>Garden terrace</option>
+                            </select>
+                        </div>
+                        <div class="form-group-d"><label class="form-label-d">Occasion</label>
+                            <select class="form-input-d">
+                                <option>None</option><option>Birthday</option><option>Anniversary</option>
+                                <option>Date night</option><option>Business dinner</option><option>Celebration</option>
+                            </select>
+                        </div>
+                        <div class="form-group-d"><label class="form-label-d">Special Requests</label>
+                            <textarea class="form-input-d" rows="3" placeholder="Allergies, dietary preferences, decor requests, surprises…" style="resize:vertical"></textarea>
+                        </div>
+                        <div style="display:flex;gap:10px;margin-top:6px">
+                            <button class="btn-primary-d" onclick="alert('Reservation request submitted! You will receive a confirmation within 30 minutes.')">Confirm Booking</button>
+                            <button class="btn-outline-d">Clear</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="info-card">
+                            <div class="info-card-title">Your Details</div>
+                            <div class="form-group-d"><label class="form-label-d">Name</label><input class="form-input-d" value="Priya Krishnamurthy"></div>
+                            <div class="form-group-d"><label class="form-label-d">Email</label><input class="form-input-d" value="priya@email.com"></div>
+                            <div class="form-group-d"><label class="form-label-d">Phone</label><input class="form-input-d" value="+91 98765 43210"></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-card-title">Booking Info</div>
+                            <div style="display:flex;flex-direction:column;gap:12px;font-size:0.84rem;color:var(--text-muted)">
+                                <div style="display:flex;gap:10px"><i class="fa fa-clock" style="color:var(--primary);margin-top:2px"></i><span>Confirmation sent within 30 minutes of booking</span></div>
+                                <div style="display:flex;gap:10px"><i class="fa fa-ban" style="color:var(--primary);margin-top:2px"></i><span>Free cancellation up to 24 hours before your reservation</span></div>
+                                <div style="display:flex;gap:10px"><i class="fa fa-star" style="color:var(--primary);margin-top:2px"></i><span>As a Platinum member, you get priority seating and a complimentary amuse-bouche</span></div>
+                                <div style="display:flex;gap:10px"><i class="fa fa-phone" style="color:var(--primary);margin-top:2px"></i><span>Need help? Call us at +91 9876543210</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ VISIT HISTORY ═══ -->
+            <div class="view" id="view-history">
+                <div class="section-header" style="margin-bottom:18px">
+                    <div><div class="section-title">Visit History</div><div class="section-subtitle">24 visits since 2022</div></div>
+                </div>
+                <div class="table-card">
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Date</th><th>Time</th><th>Covers</th><th>Dishes Ordered</th><th>Bill</th><th>Points Earned</th><th>Review</th></tr></thead>
+                            <tbody>
+                                <tr><td>Mar 30, 2026</td><td>7:00 PM</td><td>2</td><td>Greek Salad, Velvet Midnight ×2</td><td style="color:var(--primary);font-weight:600">₹6,800</td><td style="color:var(--success)">+136 pts</td><td><span class="badge badge-success">★★★★★</span></td></tr>
+                                <tr><td>Mar 14, 2026</td><td>8:30 PM</td><td>6</td><td>Full Tasting Menu ×6</td><td style="color:var(--primary);font-weight:600">₹53,400</td><td style="color:var(--success)">+1,068 pts</td><td><span class="badge badge-success">★★★★★</span></td></tr>
+                                <tr><td>Feb 14, 2026</td><td>7:00 PM</td><td>2</td><td>Chef's Table ×2</td><td style="color:var(--primary);font-weight:600">₹18,000</td><td style="color:var(--success)">+360 pts</td><td><span class="badge badge-success">★★★★★</span></td></tr>
+                                <tr><td>Jan 28, 2026</td><td>9:00 PM</td><td>4</td><td>Wagyu ×4, Golden Orchid ×4</td><td style="color:var(--primary);font-weight:600">₹21,800</td><td style="color:var(--success)">+436 pts</td><td><span class="badge badge-warning">★★★★☆</span></td></tr>
+                                <tr><td>Jan 10, 2026</td><td>7:30 PM</td><td>2</td><td>Butternut Pumpkin, Alchemist ×2</td><td style="color:var(--primary);font-weight:600">₹5,900</td><td style="color:var(--success)">+118 pts</td><td><span class="badge badge-success">★★★★★</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ MENU ═══ -->
+            <div class="view" id="view-menu">
+                <div class="section-header" style="margin-bottom:18px">
+                    <div><div class="section-title">Browse Menu</div><div class="section-subtitle">STACKLY's current offerings</div></div>
+                </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+                    <button class="act-btn" style="border-color:var(--primary);color:var(--primary)">All</button>
+                    <button class="act-btn">Mains</button>
+                    <button class="act-btn">Appetizers</button>
+                    <button class="act-btn">Desserts</button>
+                    <button class="act-btn">Cocktails</button>
+                </div>
+                <div class="menu-grid">
+                    <div class="menu-item-card"><img src="images/image_7.webp" class="menu-item-img"><div class="menu-item-body"><div class="menu-item-cat">Main Dish</div><div class="menu-item-name">Greek Salad</div><div class="menu-item-desc">Flavorful, filled with panko bread crumbs, pine nuts, sun-dried tomatoes, olives.</div><div class="menu-item-price">₹2,450</div></div></div>
+                    <div class="menu-item-card"><img src="images/image_8.webp" class="menu-item-img"><div class="menu-item-body"><div class="menu-item-cat">Main Dish</div><div class="menu-item-name">Tokusen Wagyu</div><div class="menu-item-desc">Tomatoes, green bell pepper, sliced cucumber, onion, avocados, A5 wagyu.</div><div class="menu-item-price">₹4,200</div></div></div>
+                    <div class="menu-item-card"><img src="images/image_9.webp" class="menu-item-img"><div class="menu-item-body"><div class="menu-item-cat">Appetizer</div><div class="menu-item-name">Butternut Pumpkin</div><div class="menu-item-desc">Avocados with crab meat, red onion, crab salad stuffed bell pepper.</div><div class="menu-item-price">₹1,850</div></div></div>
+                    <div class="menu-item-card"><img src="images/image_16.webp" class="menu-item-img"><div class="menu-item-body"><div class="menu-item-cat">Cocktail</div><div class="menu-item-name">Velvet Midnight</div><div class="menu-item-desc">Blackberry, gin, smoked rosemary, fresh lemon. A STACKLY signature.</div><div class="menu-item-price">₹950</div></div></div>
+                    <div class="menu-item-card"><img src="images/image_17.webp" class="menu-item-img"><div class="menu-item-body"><div class="menu-item-cat">Cocktail</div><div class="menu-item-name">Golden Orchid</div><div class="menu-item-desc">Mezcal, passionfruit, agave, firewater bitters — bold and tropical.</div><div class="menu-item-price">₹1,150</div></div></div>
+                    <div class="menu-item-card"><img src="images/image_14.webp" class="menu-item-img"><div class="menu-item-body"><div class="menu-item-cat">Cocktail</div><div class="menu-item-name">The Alchemist</div><div class="menu-item-desc">Aged whiskey, maple, orange peel, smoke. Complex and warming.</div><div class="menu-item-price">₹1,400</div></div></div>
+                </div>
+            </div>
+
+            <!-- ═══ LOYALTY ═══ -->
+            <div class="view" id="view-loyalty">
+                <div class="section-header" style="margin-bottom:20px">
+                    <div><div class="section-title">Loyalty & Perks</div><div class="section-subtitle">Your Platinum membership benefits</div></div>
+                </div>
+                <!-- Points Summary -->
+                <div class="dash-grid-2" style="margin-bottom:20px">
+                    <div class="info-card" style="margin-bottom:0;display:flex;align-items:center;gap:30px">
+                        <div style="text-align:center;flex-shrink:0">
+                            <div style="font-family:var(--font-heading);font-size:4rem;color:var(--primary);line-height:1">2,450</div>
+                            <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-muted)">Points Balance</div>
+                        </div>
+                        <div style="flex:1">
+                            <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px">Progress to Gold Elite tier</div>
+                            <div style="height:6px;background:rgba(197,160,89,0.1);border-radius:3px;margin-bottom:8px"><div style="height:100%;width:68%;background:linear-gradient(to right,var(--primary-dark),var(--primary));border-radius:3px"></div></div>
+                            <div style="font-size:0.78rem;color:var(--text-muted)">₹31,600 more spend to reach Gold Elite</div>
+                            <button class="btn-primary-d" style="margin-top:14px;padding:10px 20px">Redeem Points</button>
+                        </div>
+                    </div>
+                    <div class="info-card" style="margin-bottom:0">
+                        <div class="info-card-title">Points History</div>
+                        <div style="display:flex;flex-direction:column;gap:10px;font-size:0.82rem">
+                            <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Mar 30 visit</span><span style="color:var(--success)">+136 pts</span></div>
+                            <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Mar 14 event dinner</span><span style="color:var(--success)">+1,068 pts</span></div>
+                            <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Birthday bonus</span><span style="color:var(--success)">+500 pts</span></div>
+                            <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Redeemed — Feb dining</span><span style="color:var(--danger)">−200 pts</span></div>
+                            <div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Feb 14 Chef's Table</span><span style="color:var(--success)">+360 pts</span></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Perks Grid -->
+                <div class="perks-grid">
+                    <div class="perk-card"><div class="perk-icon"><i class="fa fa-calendar-star"></i></div><div><div class="perk-title">Priority Reservations</div><div class="perk-desc">Book up to 60 days in advance and skip the waitlist entirely — your table is always guaranteed.</div><span class="perk-status">✓ Active</span></div></div>
+                    <div class="perk-card"><div class="perk-icon"><i class="fa fa-champagne-glasses"></i></div><div><div class="perk-title">Complimentary Welcome Drink</div><div class="perk-desc">Enjoy a house cocktail on us with every visit — a STACKLY welcome, every time.</div><span class="perk-status">✓ Active</span></div></div>
+                    <div class="perk-card"><div class="perk-icon"><i class="fa fa-cake-candles"></i></div><div><div class="perk-title">Birthday Privilege</div><div class="perk-desc">A complimentary dessert platter and celebratory amuse-bouche on your birthday month.</div><span class="perk-status">✓ Active</span></div></div>
+                    <div class="perk-card"><div class="perk-icon"><i class="fa fa-eye"></i></div><div><div class="perk-title">New Menu Previews</div><div class="perk-desc">Exclusive early access to taste and provide feedback on our seasonal menu before public launch.</div><span class="perk-status">✓ Active</span></div></div>
+                    <div class="perk-card"><div class="perk-icon"><i class="fa fa-lock"></i></div><div><div class="perk-title">Chef's Table Access</div><div class="perk-desc">Unlock dedicated Chef's Table booking windows available only to Gold Elite and above members.</div><span class="perk-status locked">🔒 Gold Elite Required</span></div></div>
+                    <div class="perk-card"><div class="perk-icon"><i class="fa fa-lock"></i></div><div><div class="perk-title">Private Dining Discount</div><div class="perk-desc">15% off private dining room hire for Gold Elite and above. Available for events up to 30 guests.</div><span class="perk-status locked">🔒 Gold Elite Required</span></div></div>
+                </div>
+            </div>
+
+            <!-- ═══ REVIEWS ═══ -->
+            <div class="view" id="view-reviews">
+                <div class="section-header" style="margin-bottom:18px">
+                    <div><div class="section-title">My Reviews</div><div class="section-subtitle">5 reviews shared</div></div>
+                </div>
+                <div class="table-card">
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Visit Date</th><th>Rating</th><th>Review</th><th>Status</th></tr></thead>
+                            <tbody>
+                                <tr><td>Mar 30, 2026</td><td style="color:var(--primary)">★★★★★</td><td style="max-width:340px;font-size:0.82rem;color:var(--text-muted)">"An unforgettable evening. Every dish was a masterpiece, and the ambience was simply perfect."</td><td><span class="badge badge-success">Published</span></td></tr>
+                                <tr><td>Mar 14, 2026</td><td style="color:var(--primary)">★★★★★</td><td style="max-width:340px;font-size:0.82rem;color:var(--text-muted)">"The group tasting menu for 6 was extraordinary. Chef Lorenzo came to our table — unforgettable."</td><td><span class="badge badge-success">Published</span></td></tr>
+                                <tr><td>Feb 14, 2026</td><td style="color:var(--primary)">★★★★★</td><td style="max-width:340px;font-size:0.82rem;color:var(--text-muted)">"The most romantic anniversary dinner of our lives. The rose petal setup was a gorgeous surprise."</td><td><span class="badge badge-success">Published</span></td></tr>
+                                <tr><td>Jan 28, 2026</td><td style="color:var(--warning)">★★★★☆</td><td style="max-width:340px;font-size:0.82rem;color:var(--text-muted)">"Exceptional food. Service was slightly slow on a very busy Saturday but totally worth it."</td><td><span class="badge badge-success">Published</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ FAVOURITES ═══ -->
+            <div class="view" id="view-favourites">
+                <div class="section-header" style="margin-bottom:18px">
+                    <div><div class="section-title">My Favourites</div><div class="section-subtitle">Dishes you love</div></div>
+                </div>
+                <div class="menu-grid">
+                    <div class="menu-item-card"><div style="position:relative"><img src="images/image_7.webp" class="menu-item-img"><span style="position:absolute;top:10px;right:10px;color:var(--danger)"><i class="fa fa-heart"></i></span></div><div class="menu-item-body"><div class="menu-item-cat">Main Dish</div><div class="menu-item-name">Greek Salad</div><div class="menu-item-desc">Ordered 8 times. Your most loved dish.</div><div class="menu-item-price">₹2,450</div></div></div>
+                    <div class="menu-item-card"><div style="position:relative"><img src="images/image_16.webp" class="menu-item-img"><span style="position:absolute;top:10px;right:10px;color:var(--danger)"><i class="fa fa-heart"></i></span></div><div class="menu-item-body"><div class="menu-item-cat">Cocktail</div><div class="menu-item-name">Velvet Midnight</div><div class="menu-item-desc">Ordered 12 times. Your go-to drink.</div><div class="menu-item-price">₹950</div></div></div>
+                    <div class="menu-item-card"><div style="position:relative"><img src="images/image_8.webp" class="menu-item-img"><span style="position:absolute;top:10px;right:10px;color:var(--danger)"><i class="fa fa-heart"></i></span></div><div class="menu-item-body"><div class="menu-item-cat">Main Dish</div><div class="menu-item-name">Tokusen Wagyu</div><div class="menu-item-desc">Ordered 5 times. A special occasion staple.</div><div class="menu-item-price">₹4,200</div></div></div>
+                </div>
+            </div>
+
+            <!-- ═══ PROFILE ═══ -->
+            <div class="view" id="view-profile">
+                <div class="section-header" style="margin-bottom:20px">
+                    <div><div class="section-title">Profile & Settings</div><div class="section-subtitle">Manage your account</div></div>
+                    <button class="btn-primary-d">Save Changes</button>
+                </div>
+                <div class="dash-grid-2">
+                    <div class="info-card">
+                        <div class="info-card-title">Personal Information</div>
+                        <div class="form-row-d">
+                            <div class="form-group-d"><label class="form-label-d">First Name</label><input class="form-input-d" value="Priya"></div>
+                            <div class="form-group-d"><label class="form-label-d">Last Name</label><input class="form-input-d" value="Krishnamurthy"></div>
+                        </div>
+                        <div class="form-group-d"><label class="form-label-d">Email</label><input class="form-input-d" value="priya@email.com"></div>
+                        <div class="form-group-d"><label class="form-label-d">Phone</label><input class="form-input-d" value="+91 98765 43210"></div>
+                        <div class="form-group-d"><label class="form-label-d">Date of Birth</label><input class="form-input-d" type="date" value="1990-08-14"></div>
+                        <div class="form-group-d"><label class="form-label-d">Anniversary</label><input class="form-input-d" type="date" value="2018-02-14"></div>
+                    </div>
+                    <div>
+                        <div class="info-card">
+                            <div class="info-card-title">Dining Preferences</div>
+                            <div class="form-group-d"><label class="form-label-d">Dietary Requirements</label><select class="form-input-d"><option>None</option><option>Vegetarian</option><option>Vegan</option><option>Gluten-free</option><option>Halal</option></select></div>
+                            <div class="form-group-d"><label class="form-label-d">Allergies</label><input class="form-input-d" placeholder="e.g. nuts, shellfish"></div>
+                            <div class="form-group-d"><label class="form-label-d">Seating Preference</label><select class="form-input-d"><option>No preference</option><option>Window seat</option><option>Private dining room</option><option>Bar area</option></select></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-card-title">Notifications</div>
+                            <div style="display:flex;flex-direction:column;gap:14px;font-size:0.84rem">
+                                <div style="display:flex;justify-content:space-between;align-items:center"><span>Email confirmations</span><input type="checkbox" checked style="accent-color:var(--primary);width:16px;height:16px;cursor:pointer"></div>
+                                <div style="display:flex;justify-content:space-between;align-items:center"><span>SMS reminders</span><input type="checkbox" checked style="accent-color:var(--primary);width:16px;height:16px;cursor:pointer"></div>
+                                <div style="display:flex;justify-content:space-between;align-items:center"><span>Newsletter & offers</span><input type="checkbox" checked style="accent-color:var(--primary);width:16px;height:16px;cursor:pointer"></div>
+                                <div style="display:flex;justify-content:space-between;align-items:center"><span>Menu preview invites</span><input type="checkbox" style="accent-color:var(--primary);width:16px;height:16px;cursor:pointer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-title">Change Password</div>
+                    <div class="form-row-d">
+                        <div class="form-group-d"><label class="form-label-d">Current Password</label><input class="form-input-d" type="password" placeholder="••••••••"></div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                            <div class="form-group-d"><label class="form-label-d">New Password</label><input class="form-input-d" type="password" placeholder="••••••••"></div>
+                            <div class="form-group-d"><label class="form-label-d">Confirm New</label><input class="form-input-d" type="password" placeholder="••••••••"></div>
+                        </div>
+                    </div>
+                    <button class="btn-outline-d" style="margin-top:4px">Update Password</button>
+                </div>
+                <div style="text-align:right;margin-top:8px">
+                    <a href="login.html" onclick="localStorage.removeItem('stackly_user')" style="font-size:0.8rem;color:var(--danger);text-decoration:none;opacity:0.7">Sign out of my account →</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize Dashboard Personalization
+    const storedUser = localStorage.getItem('stackly_user') || 'Priya';
+    const displayName = storedUser.split('@')[0]; // Use first part of email or full ID
+    
+    // Update Sidebar
+    const sidebarName = document.querySelector('.sidebar-user-name');
+    if (sidebarName) sidebarName.textContent = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+    
+    // Update Topbar Greeting
+    const greetingEm = document.querySelector('.topbar-greeting-name em');
+    if (greetingEm) greetingEm.textContent = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+
+    // Update Welcome Card
+    const welcomeEm = document.querySelector('.welcome-card h2 em');
+    if (welcomeEm) welcomeEm.textContent = displayName.charAt(0).toUpperCase() + displayName.slice(1) + '.';
+
+    // Date
+    document.getElementById('topbarDate').textContent = new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+    // View switching
+    function showView(id, triggerEl) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        const viewEl = document.getElementById('view-'+id);
+        if (viewEl) viewEl.classList.add('active');
+        if (triggerEl) triggerEl.classList.add('active');
+        closeSidebar();
+        window.scrollTo(0,0);
+    }
+
+    // Mobile sidebar
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('open');
+        document.getElementById('sidebarOverlay').classList.toggle('active');
+    }
+    function closeSidebar() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('sidebarOverlay').classList.remove('active');
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | STACKLY</title>
+    <meta name="description" content="Discover the story behind STACKLY — born in Salem, Tamil Nadu, crafting modern gastronomy with classical soul since 2018.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+
+        /* ── Page Hero ── */
+        .page-hero {
+            min-height: 80vh;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding-bottom: 100px;
+        }
+        .page-hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        .page-hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.08);
+            transition: transform 10s ease;
+        }
+        .page-hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to top,
+                var(--bg-deep) 0%,
+                rgba(11,28,24,0.55) 55%,
+                rgba(11,28,24,0.25) 100%
+            );
+        }
+        .page-hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+        }
+
+        /* ── Breadcrumb ── */
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+        .breadcrumb a { color: var(--primary); text-decoration: none; }
+        .breadcrumb span { opacity: 0.5; }
+
+        /* ── Story Split ── */
+        .story-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            align-items: center;
+        }
+        .story-img-stack {
+            position: relative;
+            height: 620px;
+        }
+        .story-arch-main {
+            width: 75%;
+            height: 100%;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+            overflow: hidden;
+            border: 1px solid var(--primary);
+            outline: 12px solid rgba(197,160,89,0.06);
+        }
+        .story-arch-main img { width: 100%; height: 100%; object-fit: cover; }
+        .story-arch-float {
+            position: absolute;
+            right: 0;
+            bottom: 60px;
+            width: 45%;
+            height: 260px;
+            border-radius: 200px 200px 0 0;
+            overflow: hidden;
+            border: 1px solid var(--primary);
+        }
+        .story-arch-float img { width: 100%; height: 100%; object-fit: cover; }
+        .story-year-badge {
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background: var(--primary);
+            color: var(--bg-deep);
+            padding: 22px 28px;
+            text-align: center;
+            font-family: var(--font-heading);
+        }
+        .story-year-badge .yr { font-size: 3rem; font-weight: 700; line-height: 1; }
+        .story-year-badge .lbl { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; font-family: var(--font-body); }
+
+        /* ── Values Row ── */
+        .values-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border: 1px solid rgba(197,160,89,0.15);
+            margin-top: 80px;
+        }
+        .value-cell {
+            padding: 60px 35px;
+            border-right: 1px solid rgba(197,160,89,0.15);
+            transition: background 0.4s;
+            text-align: center;
+        }
+        .value-cell:last-child { border-right: none; }
+        .value-cell:hover { background: rgba(197,160,89,0.05); }
+        .value-icon {
+            width: 64px;
+            height: 64px;
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: var(--primary);
+            font-size: 1.3rem;
+            transition: all 0.4s;
+        }
+        .value-cell:hover .value-icon {
+            background: var(--primary);
+            color: var(--bg-deep);
+        }
+        .value-title {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+        }
+        .value-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; }
+
+        /* ── Timeline ── */
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 70px auto 0;
+            padding-left: 40px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+        }
+        .timeline-item {
+            position: relative;
+            padding: 0 0 60px 60px;
+        }
+        .timeline-item:last-child { padding-bottom: 0; }
+        .timeline-dot {
+            position: absolute;
+            left: -10px;
+            top: 6px;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            background: var(--bg-deep);
+            transition: background 0.3s;
+        }
+        .timeline-item:hover .timeline-dot { background: var(--primary); }
+        .timeline-year {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .timeline-heading {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+        .timeline-body {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+            max-width: 600px;
+        }
+
+        /* ── Chef Cards ── */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 70px;
+        }
+        .team-card {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(197,160,89,0.15);
+            transition: border-color 0.4s, transform 0.5s var(--transition);
+        }
+        .team-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-10px);
+        }
+        .team-img {
+            width: 100%;
+            height: 420px;
+            overflow: hidden;
+        }
+        .team-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .team-card:hover .team-img img { transform: scale(1.07); }
+        .team-body { padding: 30px; }
+        .team-role {
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        .team-name {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+        .team-bio { font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; }
+        .team-socials {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .team-socials a {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            transition: color 0.3s;
+            text-decoration: none;
+        }
+        .team-socials a:hover { color: var(--primary); }
+
+        /* ── Manifesto ── */
+        .manifesto-block {
+            background: var(--bg-offset);
+            border: 1px solid rgba(197,160,89,0.15);
+            padding: 100px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .manifesto-block::before {
+            content: '"';
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--font-heading);
+            font-size: 20rem;
+            color: rgba(197,160,89,0.05);
+            line-height: 1;
+            pointer-events: none;
+        }
+        .manifesto-text {
+            font-family: var(--font-heading);
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-style: italic;
+            line-height: 1.5;
+            max-width: 850px;
+            margin: 0 auto 30px;
+            position: relative;
+            z-index: 2;
+        }
+        .manifesto-attr {
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--primary);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ── Awards Strip ── */
+        .awards-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            border: 1px solid rgba(197,160,89,0.15);
+        }
+        .award-cell {
+            padding: 50px 35px;
+            border-right: 1px solid rgba(197,160,89,0.15);
+            text-align: center;
+            transition: background 0.4s, transform 0.4s var(--transition);
+            cursor: default;
+        }
+        .award-cell:last-child { border-right: none; }
+        .award-cell:hover {
+            background: rgba(197,160,89,0.05);
+            transform: translateY(-6px);
+        }
+        .award-cell i {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: block;
+        }
+        .award-cell h4 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        .award-cell p { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* ── Image Mosaic ── */
+        .mosaic {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr;
+            grid-template-rows: 300px 300px;
+            gap: 4px;
+        }
+        .mosaic-item {
+            overflow: hidden;
+            position: relative;
+        }
+        .mosaic-item.tall { grid-row: span 2; }
+        .mosaic-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .mosaic-item:hover img { transform: scale(1.07); }
+
+        /* ── Philosophy Numbers ── */
+        .philosophy-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+        .philosophy-left {
+            padding: 80px;
+            border-right: 1px solid rgba(197,160,89,0.15);
+        }
+        .philosophy-right {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border: 1px solid rgba(197,160,89,0.15);
+            border-left: none;
+        }
+        .phil-stat {
+            padding: 60px 40px;
+            border-right: 1px solid rgba(197,160,89,0.15);
+            border-bottom: 1px solid rgba(197,160,89,0.15);
+            text-align: center;
+            transition: background 0.4s;
+        }
+        .phil-stat:nth-child(2) { border-right: none; }
+        .phil-stat:nth-child(3) { border-bottom: none; }
+        .phil-stat:nth-child(4) { border-right: none; border-bottom: none; }
+        .phil-stat:hover { background: rgba(197,160,89,0.04); }
+        .phil-num {
+            font-family: var(--font-heading);
+            font-size: 4rem;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+        .phil-lbl {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+        }
+
+        /* ── CTA Band ── */
+        .cta-band {
+            background: var(--primary);
+            padding: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+        }
+        .cta-band h2 {
+            font-family: var(--font-heading);
+            font-size: clamp(2.2rem, 4vw, 3.5rem);
+            color: var(--bg-deep);
+            line-height: 1.15;
+            max-width: 600px;
+        }
+        .btn-dark {
+            background: var(--bg-deep);
+            color: var(--primary);
+            padding: 20px 50px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: all 0.4s var(--transition);
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+        }
+        .btn-dark:hover { background: var(--text-white); color: var(--bg-deep); }
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .story-split { grid-template-columns: 1fr; gap: 60px; }
+            .story-img-stack { height: 500px; }
+            .values-row { grid-template-columns: 1fr 1fr; }
+            .value-cell:nth-child(2) { border-right: none; }
+            .value-cell:nth-child(3), .value-cell:nth-child(4) { border-top: 1px solid rgba(197,160,89,0.15); }
+            .team-grid { grid-template-columns: 1fr 1fr; }
+            .awards-strip { grid-template-columns: 1fr 1fr; }
+            .award-cell:nth-child(2) { border-right: none; }
+            .award-cell:nth-child(3), .award-cell:nth-child(4) { border-top: 1px solid rgba(197,160,89,0.15); }
+            .philosophy-row { grid-template-columns: 1fr; }
+            .philosophy-left { padding: 60px 40px; border-right: none; border-bottom: 1px solid rgba(197,160,89,0.15); }
+            .philosophy-right { border-left: 1px solid rgba(197,160,89,0.15); }
+            .manifesto-block { padding: 70px 40px; }
+            .cta-band { flex-direction: column; text-align: center; padding: 60px 40px; }
+            .mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: 280px 280px; }
+            .mosaic-item.tall { grid-row: span 1; }
+        }
+        @media (max-width: 768px) {
+            .values-row { grid-template-columns: 1fr; }
+            .value-cell { border-right: none !important; border-bottom: 1px solid rgba(197,160,89,0.15); }
+            .team-grid { grid-template-columns: 1fr; }
+            .awards-strip { grid-template-columns: 1fr 1fr; }
+            .philosophy-right { grid-template-columns: 1fr; }
+            .mosaic { grid-template-columns: 1fr; grid-template-rows: repeat(5, 240px); }
+            .manifesto-block { padding: 60px 24px; }
+            .timeline { padding-left: 25px; }
+            .timeline-item { padding-left: 40px; }
+            .cta-band h2 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-content text-center">
+            <h1 class="logo" style="font-size: 4rem; opacity: 0.5;">STACKLY</h1>
+            <div style="width: 200px; height: 1px; background: rgba(255,255,255,0.1); margin: 20px auto; overflow: hidden;">
+                <div class="loader-bar" style="width: 0%; height: 100%; background: var(--primary);"></div>
+            </div>
+            <p style="text-transform: uppercase; letter-spacing: 5px; font-size: 0.8rem;">Telling our story...</p>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="logo">STACKLY</a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="services.html" class="nav-link">Services</a>
+                <a href="menu.html" class="nav-link">Menu</a>
+                <a href="about.html" class="nav-link" style="color: var(--primary);">About Us</a>
+                <a href="blogs.html" class="nav-link">Blogs</a>
+                <a href="contact.html" class="nav-link">Contact</a>
+            </nav>
+            <div class="nav-cta">
+                <a href="login.html" class="btn btn-primary" style="padding: 12px 28px;">Login</a>
+            </div>
+            <button class="mobile-toggle">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- Page Hero -->
+        <section class="page-hero">
+            <div class="page-hero-bg">
+                <img src="images/image_14.webp" alt="STACKLY Interior" id="hero-bg-img">
+            </div>
+            <div class="page-hero-content container">
+                <div class="breadcrumb">
+                    <a href="index.html">Home</a>
+                    <span>/</span>
+                    <span>About Us</span>
+                </div>
+                <span class="card-cat">✦ Our Story ✦</span>
+                <h1 class="hero-title anim-title">About Us</h1>
+                <p class="hero-subtitle" style="margin-top: 10px; font-size: 1rem;">Born in Salem. Built for the world.</p>
+            </div>
+        </section>
+
+        <!-- Our Story -->
+        <section class="section">
+            <div class="container">
+                <div class="story-split">
+                    <!-- Image Stack -->
+                    <div class="story-img-stack">
+                        <div class="story-arch-main">
+                            <img src="images/image_5.webp" alt="STACKLY Story">
+                        </div>
+                        <div class="story-arch-float">
+                            <img src="images/image_6.webp" alt="STACKLY Kitchen">
+                        </div>
+                        <div class="story-year-badge">
+                            <div class="yr">2018</div>
+                            <div class="lbl">Est. Salem</div>
+                        </div>
+                    </div>
+
+                    <!-- Story Text -->
+                    <div>
+                        <span class="card-cat">✦ How We Began ✦</span>
+                        <h2 class="hero-title" style="text-align: left; margin-bottom: 30px;">
+                            A Dream Plated<br>
+                            <em style="color: var(--primary);">With Purpose</em>
+                        </h2>
+                        <p style="opacity: 0.75; font-size: 1.05rem; line-height: 1.95; margin-bottom: 22px;">
+                            STACKLY was born from a single conviction — that great food should tell a story. Founded in 2018 in the heart of Salem, Tamil Nadu, we set out to rewrite what fine dining could mean in South India: not an imitation of elsewhere, but a confident expression of here.
+                        </p>
+                        <p style="opacity: 0.6; font-size: 1rem; line-height: 1.9; margin-bottom: 22px;">
+                            Our founders, passionate about Tamil culinary heritage, travelled across three continents studying technique, flavour, and hospitality. What they brought back was distilled into STACKLY — a restaurant where traditional Tamil ingredients meet modern culinary philosophy.
+                        </p>
+                        <p style="opacity: 0.5; font-size: 0.95rem; line-height: 1.9; margin-bottom: 40px;">
+                            Today, STACKLY stands as one of the most celebrated dining destinations in Tamil Nadu, honoured with national awards and loved by thousands of guests who return not just for the food, but for how it makes them feel.
+                        </p>
+                        <a href="index.html#contact" class="btn btn-primary" style="padding: 16px 42px; margin-right: 15px;">Reserve a Table</a>
+                        <a href="menu.html" class="btn btn-outline" style="padding: 16px 42px;">View Menu</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Values -->
+        <section class="section" style="background: var(--bg-offset); padding-top: 0;">
+            <div class="container">
+                <div class="text-center" style="max-width: 700px; margin: 0 auto; padding-top: 120px;">
+                    <span class="card-cat">✦ Our Philosophy ✦</span>
+                    <h2 class="hero-title">What We Stand For</h2>
+                    <p style="opacity: 0.6; font-size: 1rem; margin-top: 15px;">Four principles that guide every dish, every interaction, every moment.</p>
+                </div>
+                <div class="values-row">
+                    <div class="value-cell">
+                        <div class="value-icon"><i class="fa fa-leaf"></i></div>
+                        <h3 class="value-title">Farm to Table</h3>
+                        <p class="value-desc">We source our ingredients directly from trusted local farmers across Tamil Nadu, ensuring peak freshness and supporting sustainable agriculture.</p>
+                    </div>
+                    <div class="value-cell">
+                        <div class="value-icon"><i class="fa fa-fire"></i></div>
+                        <h3 class="value-title">Culinary Craft</h3>
+                        <p class="value-desc">Every dish is a product of obsessive attention — from the 72-hour slow braises to the hand-painted dessert plates. Craft is never compromised.</p>
+                    </div>
+                    <div class="value-cell">
+                        <div class="value-icon"><i class="fa fa-hands"></i></div>
+                        <h3 class="value-title">Warm Hospitality</h3>
+                        <p class="value-desc">In Tamil culture, a guest is God. That belief runs through every team member — from the first greeting to the final farewell.</p>
+                    </div>
+                    <div class="value-cell">
+                        <div class="value-icon"><i class="fa fa-globe"></i></div>
+                        <h3 class="value-title">Global Vision</h3>
+                        <p class="value-desc">We respect our roots while remaining curious about the world — drawing on global technique to elevate the flavours of home.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marquee -->
+        <div class="marquee-section text-gold">
+            <div class="marquee-content">
+                <span>OUR STORY</span> ✦ <span>SINCE 2018</span> ✦ <span>SALEM, TAMIL NADU</span> ✦ <span>FINE DINING</span> ✦ <span>CRAFTED WITH LOVE</span> ✦ <span>OUR STORY</span> ✦ <span>SINCE 2018</span> ✦ <span>SALEM, TAMIL NADU</span> ✦ <span>FINE DINING</span> ✦ <span>CRAFTED WITH LOVE</span> ✦
+            </div>
+        </div>
+
+        <!-- Manifesto Quote -->
+        <section class="section" style="padding: 0 0 120px;">
+            <div class="container">
+                <div class="manifesto-block">
+                    <p class="manifesto-text">
+                        "We don't just feed people. We give them a moment — a reason to slow down, to look at the person across the table, to feel something."
+                    </p>
+                    <p class="manifesto-attr">— Chef Lorenzo, Founder & Head Chef, STACKLY</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Journey (Timeline) -->
+        <section class="section" style="background: var(--bg-offset);">
+            <div class="container">
+                <div class="text-center" style="max-width: 700px; margin: 0 auto;">
+                    <span class="card-cat">✦ Milestones ✦</span>
+                    <h2 class="hero-title">Our Journey</h2>
+                    <p style="opacity: 0.6; font-size: 1rem; margin-top: 15px;">Eight years of growth, recognition, and relentless pursuit of excellence.</p>
+                </div>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-year">2018</div>
+                        <h3 class="timeline-heading">Doors Open</h3>
+                        <p class="timeline-body">STACKLY opens its first restaurant in Salem with a 40-cover dining room, a team of six, and an unwavering vision to bring world-class cuisine to Tamil Nadu.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-year">2019</div>
+                        <h3 class="timeline-heading">The Chef's Table Launches</h3>
+                        <p class="timeline-body">We introduce the Chef's Table experience — an intimate 6-guest kitchen-side tasting menu that sells out within hours of each release and gains national press attention.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-year">2021</div>
+                        <h3 class="timeline-heading">Times Food Award</h3>
+                        <p class="timeline-body">STACKLY is named Best Fine Dining Restaurant in Tamil Nadu by the Times Food Guide, placing us on the national culinary map for the first time.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-year">2023</div>
+                        <h3 class="timeline-heading">Private Dining & Events Wing</h3>
+                        <p class="timeline-body">We expand our premises to include a dedicated private dining suite and a full-service catering operation, bringing the STACKLY experience to events across Tamil Nadu.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-year">2024</div>
+                        <h3 class="timeline-heading">Three Michelin Stars</h3>
+                        <p class="timeline-body">STACKLY becomes the first restaurant in Salem to receive three Michelin Stars — a crowning recognition of our kitchen's consistency, creativity, and craft.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-year">2026</div>
+                        <h3 class="timeline-heading">Looking Forward</h3>
+                        <p class="timeline-body">With over 12,000 guests served and 850 events hosted, we continue to grow — staying rooted in Salem while setting our sights on new culinary horizons.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Philosophy + Stats -->
+        <section class="section" style="padding: 0;">
+            <div class="container" style="padding: 0; max-width: 100%;">
+                <div class="philosophy-row">
+                    <div class="philosophy-left">
+                        <span class="card-cat" style="display: block; margin-bottom: 20px;">✦ By the Numbers ✦</span>
+                        <h2 class="hero-title" style="text-align: left; margin-bottom: 30px;">
+                            A Decade of<br>
+                            <em style="color: var(--primary);">Delicious Numbers</em>
+                        </h2>
+                        <p style="opacity: 0.65; font-size: 1rem; line-height: 1.9; max-width: 480px;">
+                            Every number here represents a memory made, a flavour discovered, a guest who left happier than they arrived. This is what eight years of passion looks like in figures.
+                        </p>
+                    </div>
+                    <div class="philosophy-right">
+                        <div class="phil-stat">
+                            <div class="phil-num">12K+</div>
+                            <div class="phil-lbl">Guests Served</div>
+                        </div>
+                        <div class="phil-stat">
+                            <div class="phil-num">850+</div>
+                            <div class="phil-lbl">Events Hosted</div>
+                        </div>
+                        <div class="phil-stat">
+                            <div class="phil-num">200+</div>
+                            <div class="phil-lbl">Dishes Created</div>
+                        </div>
+                        <div class="phil-stat">
+                            <div class="phil-num">4.9★</div>
+                            <div class="phil-lbl">Google Rating</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Image Mosaic -->
+        <section class="section" style="padding-top: 0; padding-bottom: 0;">
+            <div class="container" style="padding: 0; max-width: 100%;">
+                <div class="mosaic">
+                    <div class="mosaic-item tall">
+                        <img src="images/image_1.webp" alt="STACKLY atmosphere">
+                    </div>
+                    <div class="mosaic-item">
+                        <img src="images/image_10.webp" alt="STACKLY food">
+                    </div>
+                    <div class="mosaic-item">
+                        <img src="images/image_15.webp" alt="STACKLY detail">
+                    </div>
+                    <div class="mosaic-item">
+                        <img src="images/image_16.webp" alt="STACKLY bar">
+                    </div>
+                    <div class="mosaic-item">
+                        <img src="images/image_3.webp" alt="STACKLY dessert">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Meet the Team -->
+        <section class="section">
+            <div class="container">
+                <div class="text-center" style="max-width: 700px; margin: 0 auto;">
+                    <span class="card-cat">✦ The People ✦</span>
+                    <h2 class="hero-title">Meet Our Team</h2>
+                    <p style="opacity: 0.6; font-size: 1rem; margin-top: 15px;">World-class talent, united by a shared obsession with extraordinary food.</p>
+                </div>
+
+                <div class="team-grid">
+                    <!-- Chef Lorenzo -->
+                    <div class="team-card">
+                        <div class="team-img">
+                            <img src="images/image_11.webp" alt="Chef Lorenzo">
+                        </div>
+                        <div class="team-body">
+                            <div class="team-role">Founder & Head Chef</div>
+                            <h3 class="team-name">Chef Lorenzo</h3>
+                            <p class="team-bio">25 years of culinary experience across Italy, Japan, and India. Lorenzo's philosophy is rooted in the belief that a single dish should contain the essence of a place, a season, and a memory.</p>
+                            <div class="team-socials">
+                                <a href="404.html"><i class="fa-brands fa-instagram"></i> Instagram</a>
+                                <a href="404.html"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Sous Chef -->
+                    <div class="team-card">
+                        <div class="team-img">
+                            <img src="images/image_12.webp" alt="Chef Priya">
+                        </div>
+                        <div class="team-body">
+                            <div class="team-role">Sous Chef</div>
+                            <h3 class="team-name">Chef Priya</h3>
+                            <p class="team-bio">A Salem native with training at Le Cordon Bleu Paris, Priya is the bridge between our classical foundations and our forward-looking menu evolution — always precise, never predictable.</p>
+                            <div class="team-socials">
+                                <a href="404.html"><i class="fa-brands fa-instagram"></i> Instagram</a>
+                                <a href="404.html"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Mixologist -->
+                    <div class="team-card">
+                        <div class="team-img">
+                            <img src="images/image_13.webp" alt="Arjun - Master Mixologist">
+                        </div>
+                        <div class="team-body">
+                            <div class="team-role">Master Mixologist</div>
+                            <h3 class="team-name">Arjun Selvam</h3>
+                            <p class="team-bio">The alchemist behind our bar programme. Arjun has a gift for translating seasonal ingredients and Tamil botanicals into cocktails that feel both familiar and thrillingly new.</p>
+                            <div class="team-socials">
+                                <a href="404.html"><i class="fa-brands fa-instagram"></i> Instagram</a>
+                                <a href="404.html"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Awards -->
+        <section class="section" style="background: var(--bg-offset);">
+            <div class="container">
+                <div class="text-center" style="max-width: 700px; margin: 0 auto 0;">
+                    <span class="card-cat">✦ Recognition ✦</span>
+                    <h2 class="hero-title" style="margin-bottom: 60px;">Our Accolades</h2>
+                </div>
+                <div class="awards-strip">
+                    <div class="award-cell">
+                        <i class="fa fa-star"></i>
+                        <h4>Three Michelin Stars</h4>
+                        <p>2024 & 2025</p>
+                    </div>
+                    <div class="award-cell">
+                        <i class="fa fa-trophy"></i>
+                        <h4>Best Fine Dining</h4>
+                        <p>World Restaurant Awards</p>
+                    </div>
+                    <div class="award-cell">
+                        <i class="fa fa-gem"></i>
+                        <h4>Luxury Dining India</h4>
+                        <p>Times Food Guide 2023</p>
+                    </div>
+                    <div class="award-cell">
+                        <i class="fa fa-wine-glass"></i>
+                        <h4>Best Wine Cellar</h4>
+                        <p>Sommelier Choice 2026</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="section">
+            <div class="container">
+                <div class="text-center" style="max-width: 700px; margin: 0 auto;">
+                    <span class="card-cat">✦ Reviews ✦</span>
+                    <h2 class="hero-title" style="font-size: clamp(2.5rem, 5vw, 4rem);">Happy Testimonials</h2>
+                </div>
+
+                <div class="testimonial-layout" style="display: flex; align-items: center; justify-content: center; gap: 40px; margin-top: 60px; flex-wrap: wrap;">
+                    <div class="stat text-center">
+                        <h2 style="font-size: 3.5rem; color: var(--text-white);">25k+</h2>
+                        <p class="card-cat">Happy Customers</p>
+                    </div>
+
+                    <div class="testi-wrap" style="position: relative; overflow: hidden; padding: 60px 20px 80px 20px; flex: 1; min-width: 300px; max-width: 700px;">
+                        <div class="testi-slider" style="display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);">
+                            <div class="testi-slide" style="width: 100%; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 20px;">
+                                <p class="testi-text">"An unforgettable dining experience! Every dish was a masterpiece, and the ambiance was simply perfect. From the first bite to the last, every moment was pure culinary bliss!"</p>
+                                <div class="avatars" style="margin-top: 10px;">
+                                    <div class="avatar"><img src="images/avatar_18.webp" alt="Sam"></div>
+                                </div>
+                                <p style="margin-top: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; color: var(--primary);">Sam Johnson</p>
+                            </div>
+                            <div class="testi-slide" style="width: 100%; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 20px;">
+                                <p class="testi-text">"The flavors were absolutely incredible. The chef's attention to detail and the presentation of each plate made it a Michelin-level experience. Highly recommended!"</p>
+                                <div class="avatars" style="margin-top: 10px;">
+                                    <div class="avatar"><img src="images/avatar_19.webp" alt="Maria"></div>
+                                </div>
+                                <p style="margin-top: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; color: var(--primary);">Maria Garcia</p>
+                            </div>
+                            <div class="testi-slide" style="width: 100%; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 20px;">
+                                <p class="testi-text">"A phenomenal atmosphere with top-tier service. The private dining room was breathtaking, and the bespoke menu curated for our anniversary exceeded every expectation."</p>
+                                <div class="avatars" style="margin-top: 10px;">
+                                    <div class="avatar"><img src="images/avatar_20.webp" alt="David"></div>
+                                </div>
+                                <p style="margin-top: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; color: var(--primary);">David Chen</p>
+                            </div>
+                        </div>
+                        <div class="testi-dots" style="display: flex; justify-content: center; gap: 12px; position: absolute; bottom: 30px; left: 0; width: 100%;">
+                            <span class="dot active" style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary); cursor: pointer; transition: 0.3s; opacity: 1;"></span>
+                            <span class="dot" style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary); cursor: pointer; transition: 0.3s; opacity: 0.3;"></span>
+                            <span class="dot" style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary); cursor: pointer; transition: 0.3s; opacity: 0.3;"></span>
+                        </div>
+                    </div>
+
+                    <div class="stat text-center">
+                        <h2 style="font-size: 3.5rem; color: var(--text-white);">4.9/5</h2>
+                        <p class="card-cat">Rated on Google</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Band -->
+        <div class="cta-band">
+            <h2>Ready to Taste the<br><em>STACKLY Story?</em></h2>
+            <a href="index.html#contact" class="btn-dark btn">Reserve Your Table</a>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer text-center" style="padding: 100px 0 50px; background: rgba(14,36,31,1); border-top: 1px solid var(--glass);">
+        <div class="container">
+            <h2 class="logo" style="font-size: 3rem; margin-bottom: 20px;">STACKLY</h2>
+            <p style="opacity: 0.5; margin-bottom: 40px; font-style: italic;">"Modern Gastronomy. Classic Soul."</p>
+
+            <style>.footer-links a:hover { color: var(--primary) !important; }</style>
+
+            <div class="footer-links" style="display: flex; justify-content: center; gap: 30px; margin-bottom: 40px; flex-wrap: wrap;">
+                <a href="about.html" style="color: var(--primary); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">About Us</a>
+                <a href="menu.html" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">Menu</a>
+                <a href="services.html" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">Services</a>
+                <a href="404.html" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">Blogs</a>
+                <a href="index.html#contact" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">Contact</a>
+                <a href="index.html" style="color: var(--text-white); text-decoration: none; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: color 0.3s;">Home</a>
+            </div>
+
+            <div class="social-icons" style="flex-direction: row; justify-content: center; margin-bottom: 40px;">
+                <a href="404.html"><i class="fa-brands fa-instagram"></i></a>
+                <a href="404.html"><i class="fa-brands fa-facebook"></i></a>
+                <a href="404.html"><i class="fa-brands fa-twitter"></i></a>
+                <a href="404.html"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+
+            <p style="font-size: 0.8rem; opacity: 0.4;">&copy; 2026 STACKLY Restaurant. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.0.45/dist/lenis.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        window.addEventListener('load', () => {
+            const bgImg = document.getElementById('hero-bg-img');
+            if (bgImg) {
+                bgImg.style.transform = 'scale(1)';
+                bgImg.style.transition = 'transform 10s ease';
+            }
+        });
+    </script>
+</body>
+</html>
